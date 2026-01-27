@@ -1,0 +1,31 @@
+/* Example: public/swagger-dark.css */
+#swagger-ui {
+  background: black;
+}
+
+.swagger-ui span {
+  color: #aeaeae !important;
+}
+
+body.swagger-ui {
+  background: #181818 !important;
+  color: #eee !important;
+}
+.swagger-ui .topbar,
+.swagger-ui .scheme-container,
+.swagger-ui .opblock,
+.swagger-ui .opblock-tag,
+.swagger-ui .responses-inner,
+.swagger-ui .response-col_status,
+.swagger-ui .opblock-summary,
+.swagger-ui .opblock-section-header {
+  background: #222 !important;
+  color: #eee !important;
+}
+.swagger-ui .opblock-summary-method {
+  color: #fff !important;
+}
+.swagger-ui .btn {
+  background: #333 !important;
+  color: #fff !important;
+}
