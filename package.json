@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
     "build": "tsc -p config/typescript.json",
-    "watch": "tsc -p config/typescript.json --watch"
+    "watch": "tsc -p config/typescript.json --watch",
+    "generate": "npx tsx src/utils/swagger/exportSwagger.ts"
   },
   "keywords": [],
   "author": "",

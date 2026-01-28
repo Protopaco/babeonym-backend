@@ -23,7 +23,12 @@ const swaggerOptions = {
     ],
     security: [{ bearerAuth: [] }],
   },
-  apis: [path.join(__dirname, '../../routes/v1/**/*.js'), path.join(__dirname, '../../routes/v1/*.js'), path.join(__dirname, '../../routes/v1/**/*.ts'), path.join(__dirname, '../../routes/v1/*.ts')],
+  apis: [
+    path.join(__dirname, '../../routes/v1/**/*.js'),
+    path.join(__dirname, '../../routes/v1/*.js'),
+    path.join(__dirname, '../../routes/v1/**/*.ts'),
+    path.join(__dirname, '../../routes/v1/*.ts')
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
