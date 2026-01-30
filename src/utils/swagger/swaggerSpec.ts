@@ -15,11 +15,7 @@ const swaggerOptions = {
       {
         url: 'http://localhost:3000', // Your development server
         description: 'Development server',
-      },
-      {
-        url: 'https://api.babeonym.com', // Your production server
-        description: 'Production server',
-      },
+      }
     ],
     security: [{ bearerAuth: [] }],
   },

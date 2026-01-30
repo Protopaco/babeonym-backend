@@ -3,7 +3,7 @@ import { pool } from '../../utils/dbController.js';
 const router = express.Router();
 /**
  * @swagger
- * /:
+ * /api/:
  *   get:
  *     operationId: getRoot
  *     tags: [Health]
@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 /**
  * @swagger
- * /health:
+ * /api/health:
  *   get:
  *     operationId: getHealthCheck
  *     tags: [Health]
