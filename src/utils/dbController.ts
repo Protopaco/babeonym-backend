@@ -10,10 +10,8 @@ const config = {
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 };
-console.log("🚀 ~ config:", config)
 
 export const pool = new Pool(config as pkg.PoolConfig);
-console.log("🚀 ~ config:", config)
 
 export async function closePool() {
   await pool.end();

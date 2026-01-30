@@ -18,6 +18,9 @@ import { pool } from './utils/dbController.js';
 
 import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
+import referenceRoute from './routes/v1/reference/index.js';
+
+const basePath = "/api";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,9 +91,9 @@ const server = app.listen(PORT, HOST, () => {
     console.log(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
 });
 
-app.use('/api/', baseRoute);
-app.use('/api/v1/auth/', authRoute);
-
+app.use(basePath, baseRoute);
+app.use(`${basePath}/v1/auth/`, authRoute);
+app.use(`${basePath}/v1/reference/`, referenceRoute);
 app.use(express.json());
 app.use(pinoHttp({ logger }));
 
