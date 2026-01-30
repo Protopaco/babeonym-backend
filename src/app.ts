@@ -17,6 +17,7 @@ import { swaggerSpec } from './utils/swagger/swaggerSpec.js';
 import { pool } from './utils/dbController.js';
 
 import baseRoute from './routes/v1/base.js';
+import authRoute from './routes/v1/auth/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,7 @@ dotenv.config();
 
 const PgStore = pgSession(session);
 const app = express();
+
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customCssUrl: '/swagger-dark.css',
@@ -44,16 +46,33 @@ app.use(
     })
 );
 
+
+// app.use(
+//     session({
+//         store: new PgStore({
+//             pool: pool,
+//             tableName: 'user_sessions',
+//         }),
+//         secret: process.env.SESSION_SECRET || 'your_secret_change_in_production',
+//         resave: false,
+//         saveUninitialized: false,
+//         cookie: cookieConfig, // Use the config object here
+//     })
+// );
+
+app.set('trust proxy', 1);
+
 app.use(
     session({
-        store: new PgStore({
-            pool: pool,
-            tableName: 'user_sessions',
-        }),
-        secret: process.env.SESSION_SECRET || 'your_secret_change_in_production',
+        store: new PgStore({ pool, tableName: 'user_sessions' }),
+        secret: process.env.SESSION_SECRET! || 'your_secret_change_in_production',
         resave: false,
         saveUninitialized: false,
-        //cookie: cookieConfig, // Use the config object here
+        cookie: {
+            secure: true,
+            sameSite: 'none',
+            httpOnly: true,
+        },
     })
 );
 
@@ -69,7 +88,8 @@ const server = app.listen(PORT, HOST, () => {
     console.log(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
 });
 
-app.use('', baseRoute);
+app.use('/api/', baseRoute);
+app.use('/api/v1/auth/', authRoute);
 
 app.use(express.json());
 app.use(pinoHttp({ logger }));
