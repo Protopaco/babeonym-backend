@@ -1,14 +1,14 @@
 
 import dotenv from 'dotenv';
 import express from 'express';
+import session from 'express-session';
 import { pinoHttp } from 'pino-http';
 import { logger } from './utils/logger.js';
-import session from 'express-session';
 import pgSession from 'connect-pg-simple';
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-// import passport from 'passport';
+import passport from 'passport';
 // import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -19,6 +19,7 @@ import { pool } from './utils/dbController.js';
 import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
 import referenceRoute from './routes/v1/reference/index.js';
+import { User } from './models/User.js';
 
 const basePath = "/api";
 
@@ -34,6 +35,9 @@ const app = express();
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customCssUrl: '/swagger-dark.css',
 }));
+app.get("/openapi.json", (req, res) => { res.json(swaggerSpec); });
+app.use(express.json());
+app.use(pinoHttp({ logger }));
 
 app.use(
     cors({
@@ -72,16 +76,34 @@ app.use(
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: true,
-            sameSite: 'none',
+            secure: process.env.NODE_ENV == 'production',
+            sameSite: 'lax',
             httpOnly: true,
         },
     })
 );
 
-app.use('/swagger-dark.css', express.static(path.join(__dirname, '/utils/swagger/swagger-dark.css')));
+passport.serializeUser((user, done) => {
+    try {
+        // Create a clean, serializable user object
+        if (!user || typeof user !== 'object' || !('id' in user)) {
+            throw new Error('Invalid user object for serialization');
+        }
+        done(null, user.id);
+    } catch (error) {
+        console.error('Serialization error:', error);
+        done(error, null);
+    }
+});
 
-app.get("/openapi.json", (req, res) => { res.json(swaggerSpec); });
+passport.deserializeUser((user: User, done) => {
+    const cleanUser: User = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+    };
+    done(null, cleanUser);
+});
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
@@ -91,11 +113,12 @@ const server = app.listen(PORT, HOST, () => {
     console.log(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(basePath, baseRoute);
 app.use(`${basePath}/v1/auth/`, authRoute);
-app.use(`${basePath}/v1/reference/`, referenceRoute);
-app.use(express.json());
-app.use(pinoHttp({ logger }));
+//app.use(`${basePath}/v1/reference/`, referenceRoute);
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {
