@@ -13,12 +13,14 @@ import passport from 'passport';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { swaggerSpec } from './utils/swagger/swaggerSpec.js';
-// import { getUser } from './utils/db/user.js';
 import { pool } from './utils/dbController.js';
 
+//Routes
 import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
 import referenceRoute from './routes/v1/reference/index.js';
+
+//Models
 import { User } from './models/User.js';
 
 const basePath = "/api";
@@ -118,7 +120,8 @@ app.use(passport.session());
 
 app.use(basePath, baseRoute);
 app.use(`${basePath}/v1/auth/`, authRoute);
-//app.use(`${basePath}/v1/reference/`, referenceRoute);
+app.use(`${basePath}/v1/reference/`, referenceRoute);
+// app.use(`${basePath}/v1/reference/decades`, getDecades);
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {

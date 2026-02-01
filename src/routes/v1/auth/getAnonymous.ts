@@ -1,5 +1,6 @@
+import { Router } from 'express';
+const router = Router();
 import createUser from '../../../db/createUser.js';
-import router from '../../../utils/router.js';
 import AuthProvider from '../../../models/AuthProvider.js';
 import { logger } from '../../../utils/logger.js';
 

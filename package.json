@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js",
+    "start": "node dist/app.js | pino-pretty",
     "build": "tsc -p config/typescript.json",
     "watch": "tsc -p config/typescript.json --watch",
     "generate": "npx tsx src/utils/swagger/exportSwagger.ts"

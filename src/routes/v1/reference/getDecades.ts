@@ -1,5 +1,8 @@
-import router from '../../../utils/router.js'
-import getReferenceDecades from '../../../db/getReferenceDecades.js'
+import { Router, Request, Response } from 'express';
+const router = Router();
+import getReferenceDecades from '../../../db/getDecades.js'
+import ensureAuthenticated from '../../../middleware/ensureAuthenticated.js';
+import { logger } from '../../../utils/logger.js';
 
 /**
  * @swagger
@@ -26,17 +29,18 @@ import getReferenceDecades from '../../../db/getReferenceDecades.js'
  *                 error:
  *                   type: string
  *               example:
- *                 error: Failed to fetch reference decades
+ *                 error: Failed to fetch decades
  */
-router.get('/decades', async (req, res) => {
+router.get('/decades', async (req: Request, res: Response) => {
     try {
         const decades = await getReferenceDecades();
-        console.log("🚀 ~ decades:", decades)
+        logger.info(decades);
         res.status(200).json({ decades });
     } catch (error) {
-        console.error('Error fetching reference decades:', error);
-        res.status(500).json({ error: 'Failed to fetch reference decades' });
+        logger.error(error);
+        res.status(500).json({ error: 'Failed to fetch decades' });
     }
+    //res.status(200).json({ decades: [] });
 });
 
 export default router;  

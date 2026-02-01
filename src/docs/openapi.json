@@ -192,7 +192,7 @@
                     }
                   },
                   "example": {
-                    "error": "Failed to fetch reference decades"
+                    "error": "Failed to fetch decades"
                   }
                 }
               }
