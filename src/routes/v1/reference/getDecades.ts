@@ -31,10 +31,10 @@ import { logger } from '../../../utils/logger.js';
  *               example:
  *                 error: Failed to fetch decades
  */
-router.get('/decades', async (req: Request, res: Response) => {
+router.get('/decades', ensureAuthenticated, async (req: Request, res: Response) => {
     try {
         const decades = await getReferenceDecades();
-        logger.info(decades);
+        logger.debug(decades, "Fetched reference decades");
         res.status(200).json({ decades });
     } catch (error) {
         logger.error(error);

@@ -9,6 +9,8 @@ import postLogoutRouter from './postLogout.js';
 
 router.use(getValidRouter);
 router.use(getAnonymousRouter);
+router.use(postLogoutRouter);
+
 // router.use(`${basePath}/google`, getGoogleRouter);
 // //router.use(`${basePath}/callback`, callbackRouter);
 // router.use(`${basePath}/logout`, postLogoutRouter);

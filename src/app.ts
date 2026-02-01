@@ -19,9 +19,11 @@ import { pool } from './utils/dbController.js';
 import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
 import referenceRoute from './routes/v1/reference/index.js';
+import userRoute from './routes/v1/user/index.js';
 
 //Models
 import { User } from './models/User.js';
+import getUser from './db/getUser.js';
 
 const basePath = "/api";
 
@@ -56,19 +58,6 @@ app.use(
 );
 
 
-// app.use(
-//     session({
-//         store: new PgStore({
-//             pool: pool,
-//             tableName: 'user_sessions',
-//         }),
-//         secret: process.env.SESSION_SECRET || 'your_secret_change_in_production',
-//         resave: false,
-//         saveUninitialized: false,
-//         cookie: cookieConfig, // Use the config object here
-//     })
-// );
-
 app.set('trust proxy', 1);
 
 app.use(
@@ -98,13 +87,15 @@ passport.serializeUser((user, done) => {
     }
 });
 
-passport.deserializeUser((user: User, done) => {
-    const cleanUser: User = {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-    };
-    done(null, cleanUser);
+passport.deserializeUser(async (userId: number, done) => {
+    logger.debug(`Deserializing user with ID: ${userId}`);
+    const userFromDb = await getUser(userId);
+    if (!userFromDb) {
+        logger.error(`User with ID ${userId} not found during deserialization`);
+        return done(new Error('User not found'), null);
+    }
+    logger.debug(userFromDb);
+    done(null, userFromDb);
 });
 
 const PORT = Number(process.env.PORT || 3000);
@@ -121,6 +112,7 @@ app.use(passport.session());
 app.use(basePath, baseRoute);
 app.use(`${basePath}/v1/auth/`, authRoute);
 app.use(`${basePath}/v1/reference/`, referenceRoute);
+app.use(`${basePath}/v1/user/`, userRoute);
 // app.use(`${basePath}/v1/reference/decades`, getDecades);
 
 // Graceful shutdown

@@ -5,7 +5,7 @@ import { logger } from '../utils/logger.js';
 export default async (): Promise<Decade[]> => {
     logger.info("Fetching decades from database");
     const { rows } = await pool.query(`SELECT * FROM get_reference_decades();`);
-    logger.info(`Fetched decades: ${JSON.stringify(rows)}`);
+    logger.debug(rows);
     const returnDecades: Decade[] = rows.map(row => ({
         id: row.out_id,
         decade: row.out_decade,
