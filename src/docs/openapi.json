@@ -200,6 +200,97 @@
         }
       }
     },
+    "/api/v1/givenName/custom": {
+      "post": {
+        "operationId": "addCustomGivenName",
+        "tags": [
+          "Given Name"
+        ],
+        "summary": "Add a custom given name",
+        "description": "Adds a custom given name for the authenticated user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "customGivenName"
+                ],
+                "properties": {
+                  "customGivenName": {
+                    "type": "string",
+                    "description": "The custom given name to add"
+                  }
+                }
+              },
+              "example": {
+                "customGivenName": "Alex"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Custom given name added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "message": "Custom given name added successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid custom given name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Invalid custom given name"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Failed to add custom given name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Failed to add custom given name"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/reference/cultures": {
       "get": {
         "operationId": "getCultures",

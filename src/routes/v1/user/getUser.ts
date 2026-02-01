@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 const router = Router();
 import ensureAuthenticated from '../../../middleware/ensureAuthenticated.js';
-import { logger } from '../../../utils/logger.js';
-import getUser from '../../../db/getUser.js';
+import { logger } from '../../../utils/logger';
 
 router.get('/me', ensureAuthenticated, async (req: Request, res: Response) => {
     try {

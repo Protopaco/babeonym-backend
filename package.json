@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js | pino-pretty",
+    "start": "npx tsx src/utils/swagger/exportSwagger.ts && npx tsx src/app.ts | npx pino-pretty",
     "build": "tsc -p config/typescript.json",
     "watch": "npm run build && nodemon src tsc -p config/typescript.json --watch",
     "generate": "npx tsx src/utils/swagger/exportSwagger.ts"
@@ -29,6 +29,7 @@
     "pino-http": "^11.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -36,7 +37,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.18.2",
-    "@types/node": "^25.0.10",
+    "@types/node": "^25.1.0",
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-local": "^1.0.38",
     "@types/swagger-jsdoc": "^6.0.4",

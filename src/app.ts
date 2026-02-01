@@ -20,6 +20,7 @@ import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
 import referenceRoute from './routes/v1/reference/index.js';
 import userRoute from './routes/v1/user/index.js';
+import givenNameRoute from './routes/v1/givenName/index.js';
 
 //Models
 import { User } from './models/User.js';
@@ -111,9 +112,9 @@ app.use(passport.session());
 
 app.use(basePath, baseRoute);
 app.use(`${basePath}/v1/auth/`, authRoute);
+app.use(`${basePath}/v1/givenName/`, givenNameRoute);
 app.use(`${basePath}/v1/reference/`, referenceRoute);
 app.use(`${basePath}/v1/user/`, userRoute);
-// app.use(`${basePath}/v1/reference/decades`, getDecades);
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {
