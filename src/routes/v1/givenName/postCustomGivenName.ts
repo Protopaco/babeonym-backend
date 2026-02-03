@@ -3,6 +3,7 @@ const router = Router();
 import ensureAuthenticated from '../../../middleware/ensureAuthenticated';
 import addCustomGivenName from '../../../db/addCustomGivenName';
 import { logger } from '../../../utils/logger.js';
+import mapDatabaseErrors from '../../../middleware/mapErrorResponse.js';
 
 /**
  * @swagger
@@ -70,13 +71,8 @@ router.post('/custom', ensureAuthenticated, async (req: Request, res: Response) 
         return res.status(400).json({ error: 'Invalid custom given name' });
     }
 
-    try {
-        await addCustomGivenName(req.user!.id, customGivenName);
-        res.status(200).json({ message: 'Custom given name added successfully' });
-    } catch (error) {
-        logger.error(error);
-        res.status(500).json({ error: 'Failed to add custom given name' });
-    }
+    await addCustomGivenName(req.user!.id, customGivenName);
+    res.status(200).json({ message: 'Custom given name added successfully' });
 });
 
 export default router;

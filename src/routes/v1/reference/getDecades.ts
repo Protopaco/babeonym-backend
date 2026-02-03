@@ -32,15 +32,9 @@ import { logger } from '../../../utils/logger.js';
  *                 error: Failed to fetch decades
  */
 router.get('/decades', ensureAuthenticated, async (req: Request, res: Response) => {
-    try {
-        const decades = await getReferenceDecades();
-        logger.debug(decades, "Fetched reference decades");
-        res.status(200).json({ decades });
-    } catch (error) {
-        logger.error(error);
-        res.status(500).json({ error: 'Failed to fetch decades' });
-    }
-    //res.status(200).json({ decades: [] });
+    const decades = await getReferenceDecades();
+    logger.debug(decades, "Fetched reference decades");
+    res.status(200).json({ decades });
 });
 
 export default router;  

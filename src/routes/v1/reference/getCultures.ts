@@ -52,14 +52,9 @@ import getCultures from '../../../db/getCultures.js';
  */
 
 router.get('/cultures', ensureAuthenticated, async (req: Request, res: Response) => {
-    try {
-        const cultures = await getCultures();
-        logger.debug(cultures);
-        res.status(200).json({ cultures });
-    } catch (error) {
-        logger.error(error);
-        res.status(500).json({ error: 'Failed to fetch cultures' });
-    }
+    const cultures = await getCultures();
+    logger.debug(cultures);
+    res.status(200).json({ cultures });
 });
 
 export default router;

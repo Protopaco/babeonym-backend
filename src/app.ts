@@ -15,6 +15,9 @@ import { fileURLToPath } from 'url';
 import { swaggerSpec } from './utils/swagger/swaggerSpec.js';
 import { pool } from './utils/dbController.js';
 
+//middleware
+import mapErrorResponse from './middleware/mapErrorResponse.js';
+
 //Routes
 import baseRoute from './routes/v1/base.js';
 import authRoute from './routes/v1/auth/index.js';
@@ -105,6 +108,7 @@ const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 const server = app.listen(PORT, HOST, () => {
     console.log(`API server running at http://${HOST}:${PORT}`);
     console.log(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
+    app.use(mapErrorResponse)
 });
 
 app.use(passport.initialize());
@@ -115,6 +119,7 @@ app.use(`${basePath}/v1/auth/`, authRoute);
 app.use(`${basePath}/v1/givenName/`, givenNameRoute);
 app.use(`${basePath}/v1/reference/`, referenceRoute);
 app.use(`${basePath}/v1/user/`, userRoute);
+
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {
