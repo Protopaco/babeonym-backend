@@ -1,0 +1,10 @@
+{
+    "extends": "./typescript.json",
+    "ts-node":{
+        "transpileOnly": true,
+        "files": true,
+    },
+    "include": ["src/**/*.ts", "config/nodemon.json"],
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {"module": "commonjs"}
+}
