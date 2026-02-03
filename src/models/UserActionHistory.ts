@@ -2,7 +2,7 @@ import NameState from './NameState.js';
 
 export default interface UserActionHistory {
     givenName: string;
-    state: typeof NameState;
+    state: keyof typeof NameState;
     dateUpdated: Date;
     givenCustomNameBridgeId: number;
 }

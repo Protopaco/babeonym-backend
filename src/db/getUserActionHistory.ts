@@ -14,15 +14,9 @@ export default async (userId: number): Promise<UserActionHistory[]> => {
         }
 
         const history: UserActionHistory[] = rows.map(row => {
-
-            const newState = NameState[row.out_state.toUpperCase() as keyof typeof NameState];
-            if (!newState) {
-                throw new Error(`Invalid name state value: ${row.out_state}`);
-            }
-            logger.debug(`Mapped state: ${row.out_state} to ${newState}`);
             return {
                 givenName: row.out_given_name,
-                state: newState,
+                state: row.out_state as keyof typeof NameState,
                 dateUpdated: row.out_date_updated,
                 givenCustomNameBridgeId: row.out_given_custom_name_bridge_id
             }
