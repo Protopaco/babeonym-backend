@@ -37,7 +37,7 @@ router.get('/health', async (req, res) => {
     await pool.query('SELECT 1');
 
     res.status(200).json({
-      status: 'healthy',
+      status: 'ok',
       timestamp: new Date().toISOString(),
       database: 'connected',
       uptime: process.uptime(),
