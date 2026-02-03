@@ -3,7 +3,7 @@ const router = Router();
 import ensureAuthenticated from '../../../middleware/ensureAuthenticated';
 import addCustomGivenName from '../../../db/addCustomGivenName';
 import { logger } from '../../../utils/logger.js';
-import mapDatabaseErrors from '../../../middleware/mapErrorResponse.js';
+
 
 /**
  * @swagger
