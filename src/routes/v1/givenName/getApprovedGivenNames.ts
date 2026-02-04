@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 const router = Router();
-import ensureAuthenticated from '../../../middleware/ensureAuthenticated';
-import getApprovedGivenNames from '../../../db/getApprovedGivenNames';
-import { logger } from '../../../utils/logger.js';
+import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
+import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
+import { logger } from "../../../utils/logger.js";
+import User from "../../../models/User";
 
 /**
  * @swagger
@@ -59,14 +60,18 @@ import { logger } from '../../../utils/logger.js';
  *                   example: "Failed to fetch approved given names"
  */
 
-
-router.get('/approved', ensureAuthenticated, async (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    logger.info(`Received request for approved given names from user ID: ${userId}`);
+router.get(
+  "/approved",
+  ensureAuthenticated,
+  async (req: Request, res: Response) => {
+    const userId = (req.user as User).id;
+    logger.info(
+      `Received request for approved given names from user ID: ${userId}`,
+    );
     const approvedGivenNames = await getApprovedGivenNames(userId);
-    logger.debug(approvedGivenNames)
+    logger.debug(approvedGivenNames);
     res.status(200).json(approvedGivenNames);
+  },
+);
 
-});
-
-export default router;  
+export default router;

@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 const router = Router();
-import ensureAuthenticated from '../../../middleware/ensureAuthenticated';
-import addCustomGivenName from '../../../db/addCustomGivenName';
-import { logger } from '../../../utils/logger.js';
-
+import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
+import addCustomGivenName from "../../../db/addCustomGivenName";
+import { logger } from "../../../utils/logger.js";
+import User from "../../../models/User.js";
 
 /**
  * @swagger
@@ -64,15 +64,19 @@ import { logger } from '../../../utils/logger.js';
  *             example:
  *               error: "Failed to add custom given name"
  */
-router.post('/custom', ensureAuthenticated, async (req: Request, res: Response) => {
+router.post(
+  "/custom",
+  ensureAuthenticated,
+  async (req: Request, res: Response) => {
     logger.debug(req.body);
     const { customGivenName } = req.body;
-    if (!customGivenName || typeof customGivenName !== 'string') {
-        return res.status(400).json({ error: 'Invalid custom given name' });
+    if (!customGivenName || typeof customGivenName !== "string") {
+      return res.status(400).json({ error: "Invalid custom given name" });
     }
-
-    await addCustomGivenName(req.user!.id, customGivenName);
-    res.status(200).json({ message: 'Custom given name added successfully' });
-});
+    const userId = (req.user as User).id;
+    await addCustomGivenName(userId, customGivenName);
+    res.status(200).json({ message: "Custom given name added successfully" });
+  },
+);
 
 export default router;

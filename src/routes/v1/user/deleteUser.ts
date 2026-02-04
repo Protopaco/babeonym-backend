@@ -2,13 +2,14 @@ import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
 import { logger } from "../../../utils/logger";
-import deleteUser from "../../../db/deleteUser.js";
+import deleteUser from "../../../db/deleteUser";
+import User from "../../../models/User";
 
 router.delete(
   "/me",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
-    const userId = req.user?.id;
+    const userId = (req.user as User).id;
     logger.info(`Deleting user with ID: ${userId}`);
     await deleteUser(userId!);
 
