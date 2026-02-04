@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import request from "supertest";
 import app from "../../src/app.js";
+import cleanUp from "../helpers/cleanUp.js";
 
 describe("Get User Action History", () => {
   it("200", async () => {
@@ -37,5 +38,6 @@ describe("Get User Action History", () => {
         state: "selected",
       }),
     );
+    await cleanUp(cookie);
   });
 });
