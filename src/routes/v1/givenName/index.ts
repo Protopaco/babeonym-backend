@@ -2,7 +2,7 @@
 import { Router } from 'express';
 const router = Router();
 
-import getGivenNamesByUserId from './getGivenNamesByUserId';
+import getGivenNamesByUserId from './getNameCandidates';
 import postCustomGivenNameRouter from './postCustomGivenName';
 import getApprovedGivenNamesRouter from './getApprovedGivenNames';
 import postGivenNameActionRouter from './postGivenNameAction';
