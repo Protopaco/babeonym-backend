@@ -1,5 +1,4 @@
-export interface GivenName {
-    id: number;
+export default interface GivenName {
     givenName: string;
     givenCustomNameBridgeId: number;
 }
