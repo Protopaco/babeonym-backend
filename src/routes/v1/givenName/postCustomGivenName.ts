@@ -4,6 +4,7 @@ import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import addCustomGivenName from "../../../db/addCustomGivenName";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
+import isBadWord from "../../../utils/isBadWord.js";
 
 /**
  * @swagger
@@ -73,6 +74,13 @@ router.post(
     if (!customGivenName || typeof customGivenName !== "string") {
       return res.status(400).json({ error: "Invalid custom given name" });
     }
+
+    if (isBadWord(customGivenName)) {
+      return res
+        .status(400)
+        .json({ error: "customGivenName contains inappropriate language" });
+    }
+
     const userId = (req.user as User).id;
     await addCustomGivenName(userId, customGivenName);
     res.status(200).json({ message: "Custom given name added successfully" });
