@@ -35,7 +35,7 @@ describe("Get User Action History", () => {
     expect(actionHistory).toContainEqual(
       expect.objectContaining({
         givenName: "HistoryTestName",
-        state: "selected",
+        state: "approved",
       }),
     );
     await cleanUp(cookie);

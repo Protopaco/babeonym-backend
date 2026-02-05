@@ -3,11 +3,11 @@ import request from "supertest";
 import app from "../../src/app.js";
 import { Decade } from "../../src/models/Decade.js";
 import cleanUp from "../helpers/cleanUp.js";
+import authAnonymous from "../helpers/authAnonymous.js";
 
 describe("Get Decades", () => {
   it("200", async () => {
-    const res = await request(app).get("/api/v1/auth/anonymous ");
-    const cookie = res.headers["set-cookie"];
+    const cookie = await authAnonymous();
 
     const decRes = await request(app)
       .get("/api/v1/reference/decades")

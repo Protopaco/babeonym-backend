@@ -1,5 +1,5 @@
 export default {
-    SELECTED: 'selected',
-    REJECTED: 'rejected',
-    SNOOZED: 'snoozed'
-}
+  APPROVED: "approved",
+  REJECTED: "rejected",
+  SNOOZED: "snoozed",
+};

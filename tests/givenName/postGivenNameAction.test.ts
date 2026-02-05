@@ -3,30 +3,26 @@ import request from "supertest";
 import app from "../../src/app.js";
 import authAnonymous from "../helpers/authAnonymous.js";
 import cleanUp from "../helpers/cleanUp.js";
+import getNameCandidates from "../helpers/getNameCandidates.js";
+import GivenName from "../../src/models/GivenName.js";
 
-describe("Given Name Action - Accept", () => {
-  it.skip("200", async () => {
+describe("Given Name Action - Approve", () => {
+  it("200", async () => {
     const cookie = await authAnonymous();
-    const getNamesRes = await request(app)
-      .get("/api/v1/givenName/candidates?limit=1")
-      .set("Cookie", cookie);
+    const nameArray = await getNameCandidates(cookie, 1);
+    const name: GivenName = nameArray[0];
 
-    expect(getNamesRes.status).toBe(200);
-    const names = getNamesRes.body;
-    expect(Array.isArray(names)).toBe(true);
-    expect(names).toHaveLength(1);
-    const nameId = names[0].id;
-
+    console.log("Candidate Name ID:", name.givenCustomNameBridgeId);
     const postRes = await request(app)
       .post("/api/v1/givenName/action")
       .set("Cookie", cookie)
       .send({
-        givenNameId: nameId,
-        action: "accept",
+        givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+        newState: "approved",
       });
 
     expect(postRes.status).toBe(200);
-    expect(postRes.body.message).toBe("Given name accepted successfully");
+    expect(postRes.body.message).toBe("Given name action updated successfully");
 
     const getApprovedRes = await request(app)
       .get("/api/v1/givenName/approved")
@@ -35,9 +31,83 @@ describe("Given Name Action - Accept", () => {
     expect(getApprovedRes.status).toBe(200);
     const approvedNames: string[] = getApprovedRes.body;
     expect(approvedNames).toContainEqual(
-      expect.objectContaining({ id: nameId }),
+      expect.objectContaining({
+        givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+      }),
     );
 
     cleanUp(cookie);
+  });
+
+  describe("Given Name Action - Rejected", () => {
+    it("200", async () => {
+      const cookie = await authAnonymous();
+
+      const nameArray = await getNameCandidates(cookie, 1);
+      const name: GivenName = nameArray[0];
+
+      const postRes = await request(app)
+        .post("/api/v1/givenName/action")
+        .set("Cookie", cookie)
+        .send({
+          givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+          newState: "rejected",
+        });
+
+      expect(postRes.status).toBe(200);
+      expect(postRes.body.message).toBe(
+        "Given name action updated successfully",
+      );
+
+      const getApprovedRes = await request(app)
+        .get("/api/v1/givenName/approved")
+        .set("Cookie", cookie);
+
+      expect(getApprovedRes.status).toBe(200);
+      const approvedNames: string[] = getApprovedRes.body;
+      expect(approvedNames).not.toContainEqual(
+        expect.objectContaining({
+          givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+        }),
+      );
+
+      cleanUp(cookie);
+    });
+  });
+
+  describe("Given Name Action - Snoozed", () => {
+    it("200", async () => {
+      const cookie = await authAnonymous();
+
+      const nameArray = await getNameCandidates(cookie, 1);
+      const name: GivenName = nameArray[0];
+
+      const postRes = await request(app)
+        .post("/api/v1/givenName/action")
+        .set("Cookie", cookie)
+        .send({
+          givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+          newState: "snoozed",
+        });
+
+      expect(postRes.status).toBe(200);
+      expect(postRes.body.message).toBe(
+        "Given name action updated successfully",
+      );
+
+      const getApprovedRes = await request(app)
+        .get("/api/v1/givenName/approved")
+        .set("Cookie", cookie);
+
+      expect(getApprovedRes.status).toBe(200);
+      const approvedNames: string[] = getApprovedRes.body;
+      expect(approvedNames).not.toContainEqual(
+        expect.objectContaining({
+          givenCustomNameBridgeId: name.givenCustomNameBridgeId,
+        }),
+      );
+
+      cleanUp(cookie);
+    });
   });
 });

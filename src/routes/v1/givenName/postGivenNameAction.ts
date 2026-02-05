@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
-import addCustomGivenName from "../../../db/addCustomGivenName";
 import { logger } from "../../../utils/logger";
 import NameState from "../../../models/NameState";
 import updateGivenNameAction from "../../../db/updateGivenNameAction";
@@ -16,7 +15,7 @@ router.post(
     if (
       typeof givenCustomNameBridgeId !== "number" ||
       !newState ||
-      (newState !== NameState.SELECTED &&
+      (newState !== NameState.APPROVED &&
         newState !== NameState.REJECTED &&
         newState !== NameState.SNOOZED)
     ) {
