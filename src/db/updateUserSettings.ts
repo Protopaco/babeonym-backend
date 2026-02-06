@@ -1,6 +1,5 @@
 import { pool } from "../utils/dbController";
 import UserSettings from "../models/UserSettings";
-import Theme from "../models/Theme";
 import { logger } from "../utils/logger";
 
 export default async (
