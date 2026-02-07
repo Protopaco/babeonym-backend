@@ -3,8 +3,8 @@ const router = Router();
 import passport from "passport";
 
 router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["openid", "email"] }),
+  "/microsoft",
+  passport.authenticate("microsoft", { scope: ["openid", "email"] }),
 );
 
 export default router;

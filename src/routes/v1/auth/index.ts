@@ -1,17 +1,20 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
 
-import getValidRouter from './getValid.js';
-import getGoogleRouter from './getGoogle.js';
-import getAnonymousRouter from './getAnonymous.js';
-//import callbackRouter from './callback';
-import postLogoutRouter from './postLogout.js';
+import getValidRouter from "./getValid.js";
+import getGoogleRouter from "./getGoogle.js";
+import getGoogleCallbackRouter from "./getGoogleCallback.js";
+import getAnonymousRouter from "./getAnonymous.js";
+import getMicrosoftRouter from "./getMicrosoft.js";
+import getMicrosoftCallbackRouter from "./getMicrosoftCallback.js";
+import postLogoutRouter from "./postLogout.js";
 
 router.use(getValidRouter);
 router.use(getAnonymousRouter);
 router.use(postLogoutRouter);
+router.use(getGoogleRouter);
+router.use(getGoogleCallbackRouter);
+router.use(getMicrosoftRouter);
+router.use(getMicrosoftCallbackRouter);
 
-// router.use(`${basePath}/google`, getGoogleRouter);
-// //router.use(`${basePath}/callback`, callbackRouter);
-// router.use(`${basePath}/logout`, postLogoutRouter);
 export default router;

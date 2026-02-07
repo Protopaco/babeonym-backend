@@ -8,11 +8,13 @@ import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import passport from "passport";
-// import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
 import path from "path";
 import { fileURLToPath } from "url";
 import { swaggerSpec } from "./utils/swagger/swaggerSpec.js";
 import { pool } from "./utils/dbController.js";
+import * as client from "openid-client";
+import { Strategy as OidcStrategy } from "openid-client/passport";
 
 //middleware
 import mapErrorResponse from "./middleware/mapErrorResponse.js";
@@ -27,6 +29,8 @@ import givenNameRoute from "./routes/v1/givenName/index.js";
 //Models
 import User from "./models/User.js";
 import getUser from "./db/getUser.js";
+import getUserByForeignId from "./db/getUserByForeignId.js";
+import AuthProvider from "./models/AuthProvider.js";
 
 const basePath = "/api";
 
@@ -64,6 +68,97 @@ app.use(
     credentials: true,
   }),
 );
+// Configure Google OAuth strategy (only if credentials are provided)
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: `${process.env.BACKEND_BASE_URL}/api/v1/auth/google/callback`,
+        scope: ["openid", "email"],
+      },
+      async (accessToken, refreshToken, profile: Profile, done) => {
+        try {
+          const googleId = profile.id;
+          const email = profile?.emails?.[0]?.value;
+
+          let user = await getUserByForeignId(googleId, AuthProvider.GOOGLE);
+
+          // Check if user is null, undefined, or false (no user found)
+          if (!user || user === null) {
+            console.log("New user detected, returning new user flag");
+            return done(null, { isNewUser: true, googleId, email });
+          }
+
+          console.log("Existing user found, logging in");
+          return done(null, { ...user, isNewUser: false });
+        } catch (error) {
+          console.error("Error in Google OAuth strategy:", error);
+          return done(error, undefined);
+        }
+      },
+    ),
+  );
+} else {
+  console.warn(
+    "Google OAuth not configured. GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET required.",
+  );
+}
+
+const initMicrosoftAuth = async () => {
+  if (
+    !process.env.MICROSOFT_CLIENT_ID ||
+    !process.env.MICROSOFT_CLIENT_SECRET
+  ) {
+    console.warn("Microsoft OAuth not configured.");
+    return;
+  }
+
+  const tenant = process.env.MICROSOFT_TENANT || "common";
+
+  const config = await client.discovery(
+    new URL(`https://login.microsoftonline.com/${tenant}/v2.0`),
+    process.env.MICROSOFT_CLIENT_ID,
+    process.env.MICROSOFT_CLIENT_SECRET,
+  );
+
+  passport.use(
+    "microsoft",
+    new OidcStrategy(
+      {
+        config,
+        scope: "openid profile email",
+        callbackURL: `${process.env.BACKEND_BASE_URL}/api/v1/auth/microsoft/callback`,
+      },
+      async (tokens, done) => {
+        try {
+          const claims = tokens.claims();
+
+          const microsoftId = claims?.sub;
+          const email =
+            (claims as any)?.email ||
+            (claims as any)?.preferred_username ||
+            (claims as any)?.upn;
+
+          if (!microsoftId)
+            return done(new Error("Missing Microsoft subject"), undefined);
+
+          const user = await getUserByForeignId(
+            microsoftId,
+            AuthProvider.MICROSOFT,
+          );
+
+          if (!user) return done(null, { isNewUser: true, microsoftId, email });
+
+          return done(null, { ...user, isNewUser: false });
+        } catch (e) {
+          return done(e as Error, undefined);
+        }
+      },
+    ),
+  );
+};
 
 app.set("trust proxy", 1);
 

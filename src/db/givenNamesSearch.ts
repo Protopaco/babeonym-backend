@@ -19,6 +19,7 @@ export default async (
     const givenNames: GivenName[] = rows.map((row) => ({
       givenName: row.out_given_name,
       givenCustomNameBridgeId: row.out_given_custom_name_bridge_id,
+      rating: row.out_rating,
     }));
 
     return givenNames;
