@@ -7,7 +7,7 @@ import User from "../../../models/User.js";
 
 /**
  * @swagger
- * /givenName/compare:
+ * api/v1/givenName/compare:
  *   post:
  *     summary: Compare two given names
  *     description: Records a comparison result between two given names for the authenticated user.

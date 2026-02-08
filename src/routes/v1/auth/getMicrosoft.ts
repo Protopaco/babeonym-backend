@@ -4,7 +4,7 @@ import passport from "passport";
 
 /**
  * @swagger
- * /auth/microsoft:
+ * api/v1/auth/microsoft:
  *   get:
  *     summary: Start Microsoft OAuth login
  *     description: Redirects the user to Microsoft OAuth consent screen.

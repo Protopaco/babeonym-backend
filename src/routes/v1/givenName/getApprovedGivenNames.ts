@@ -8,7 +8,7 @@ import GivenName from "../../../models/GivenName.js";
 
 /**
  * @swagger
- * /givenName/approved:
+ * api/v1/givenName/approved:
  *   get:
  *     summary: Get approved given names
  *     description: Returns the authenticated user's approved given names.

@@ -1,60 +1,48 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 const router = Router();
-import ensureAuthenticated from '../../../middleware/ensureAuthenticated.js';
-import { logger } from '../../../utils/logger.js';
-import getCultures from '../../../db/getCultures.js';
-
+import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
+import { logger } from "../../../utils/logger.js";
+import getCultures from "../../../db/getCultures.js";
+import { Culture } from "../../../models/Culture.js";
 
 /**
  * @swagger
- * /api/v1/reference/cultures:
+ * api/v1/reference/cultures:
  *   get:
- *     operationId: getCultures
- *     tags: [Reference]
- *     summary: Get list of cultures
- *     description: Returns all supported cultures
+ *     summary: Get cultures
+ *     description: Returns the list of available cultures.
+ *     tags:
+ *       - Reference
  *     responses:
  *       200:
- *         description: Cultures returned successfully
+ *         description: List of cultures
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [cultures]
  *               properties:
  *                 cultures:
  *                   type: array
  *                   items:
- *                     type: string
- *               example:
- *                 cultures: ["American", "British", "Japanese"]
+ *                     $ref: '#/components/schemas/Culture'
  *       401:
- *         description: Unauthorized
+ *         description: Not authenticated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: "Unauthorized"
- *       500:
- *         description: Failed to fetch cultures
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: "Failed to fetch cultures"
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
  */
 
-router.get('/cultures', ensureAuthenticated, async (req: Request, res: Response) => {
-    const cultures = await getCultures();
-    logger.debug(cultures);
+router.get(
+  "/cultures",
+  ensureAuthenticated,
+  async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
+    logger.info("Received request for cultures from user ID: " + userId);
+    const cultures: Culture[] = await getCultures();
     res.status(200).json({ cultures });
-});
+  },
+);
 
 export default router;

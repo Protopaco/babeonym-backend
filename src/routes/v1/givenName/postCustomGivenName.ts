@@ -8,7 +8,7 @@ import isBadWord from "../../../utils/isBadWord.js";
 
 /**
  * @swagger
- * /givenName/custom:
+ * api/v1/givenName/custom:
  *   post:
  *     summary: Add a custom given name
  *     description: Adds a user-defined custom given name for the authenticated user.

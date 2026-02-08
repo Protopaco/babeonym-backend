@@ -13,7 +13,7 @@ const frontEndBaseUrl =
 
 /**
  * @swagger
- * /auth/google/callback:
+ * api/v1/auth/google/callback:
  *   get:
  *     summary: Handle Google OAuth callback
  *     description: >

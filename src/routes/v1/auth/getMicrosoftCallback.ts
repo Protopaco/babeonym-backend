@@ -13,7 +13,7 @@ const frontEndBaseUrl =
 
 /**
  * @swagger
- * /auth/microsoft/callback:
+ * api/v1/auth/microsoft/callback:
  *   get:
  *     summary: Handle Microsoft OAuth callback
  *     description: >

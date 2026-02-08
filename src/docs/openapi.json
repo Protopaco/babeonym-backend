@@ -150,7 +150,7 @@
     }
   },
   "paths": {
-    "/auth/anonymous": {
+    "api/v1/auth/anonymous": {
       "get": {
         "summary": "Create an anonymous user session",
         "description": "Creates a new anonymous user and logs them in via session cookie.",
@@ -206,7 +206,7 @@
         }
       }
     },
-    "/auth/google": {
+    "api/v1/auth/google": {
       "get": {
         "summary": "Start Google OAuth login",
         "description": "Redirects the user to Google OAuth consent screen.",
@@ -220,7 +220,7 @@
         }
       }
     },
-    "/auth/google/callback": {
+    "api/v1/auth/google/callback": {
       "get": {
         "summary": "Handle Google OAuth callback",
         "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
@@ -254,7 +254,7 @@
         }
       }
     },
-    "/auth/microsoft": {
+    "api/v1/auth/microsoft": {
       "get": {
         "summary": "Start Microsoft OAuth login",
         "description": "Redirects the user to Microsoft OAuth consent screen.",
@@ -268,7 +268,7 @@
         }
       }
     },
-    "/auth/microsoft/callback": {
+    "api/v1/auth/microsoft/callback": {
       "get": {
         "summary": "Handle Microsoft OAuth callback",
         "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
@@ -302,7 +302,7 @@
         }
       }
     },
-    "/auth/logout": {
+    "api/v1/auth/logout": {
       "post": {
         "summary": "Log out the current user",
         "description": "Logs out the currently authenticated user and destroys the session.\n",
@@ -385,7 +385,7 @@
         }
       }
     },
-    "/givenName/approved": {
+    "api/v1/givenName/approved": {
       "get": {
         "summary": "Get approved given names",
         "description": "Returns the authenticated user's approved given names.",
@@ -419,7 +419,7 @@
         }
       }
     },
-    "/givenName/search": {
+    "api/v1/givenName/search": {
       "get": {
         "summary": "Search given names",
         "description": "Searches given names for the authenticated user using a text query.\n",
@@ -493,7 +493,7 @@
         }
       }
     },
-    "/givenName/candidates": {
+    "api/v1/givenName/candidates": {
       "get": {
         "summary": "Get given name candidates",
         "description": "Returns candidate given names for the authenticated user based on optional filters.",
@@ -574,7 +574,7 @@
         }
       }
     },
-    "/givenName/compare": {
+    "api/v1/givenName/compare": {
       "post": {
         "summary": "Compare two given names",
         "description": "Records a comparison result between two given names for the authenticated user.",
@@ -657,7 +657,7 @@
         }
       }
     },
-    "/givenName/custom": {
+    "api/v1/givenName/custom": {
       "post": {
         "summary": "Add a custom given name",
         "description": "Adds a user-defined custom given name for the authenticated user.",
@@ -734,7 +734,7 @@
         }
       }
     },
-    "/givenName/action": {
+    "api/v1/givenName/action": {
       "post": {
         "summary": "Update given name state",
         "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
@@ -822,72 +822,41 @@
         }
       }
     },
-    "/api/v1/reference/cultures": {
+    "api/v1/reference/cultures": {
       "get": {
-        "operationId": "getCultures",
+        "summary": "Get cultures",
+        "description": "Returns the list of available cultures.",
         "tags": [
           "Reference"
         ],
-        "summary": "Get list of cultures",
-        "description": "Returns all supported cultures",
         "responses": {
           "200": {
-            "description": "Cultures returned successfully",
+            "description": "List of cultures",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "cultures"
+                  ],
                   "properties": {
                     "cultures": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/Culture"
                       }
                     }
-                  },
-                  "example": {
-                    "cultures": [
-                      "American",
-                      "British",
-                      "Japanese"
-                    ]
                   }
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Not authenticated",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  },
-                  "example": {
-                    "error": "Unauthorized"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Failed to fetch cultures",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  },
-                  "example": {
-                    "error": "Failed to fetch cultures"
-                  }
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
                 }
               }
             }
