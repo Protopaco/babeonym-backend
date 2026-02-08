@@ -87,14 +87,14 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 
           // Check if user is null, undefined, or false (no user found)
           if (!user || user === null) {
-            console.log("New user detected, returning new user flag");
+            logger.info("New user detected, returning new user flag");
             return done(null, { isNewUser: true, googleId, email });
           }
 
-          console.log("Existing user found, logging in");
+          logger.info("Existing user found, logging in");
           return done(null, { ...user, isNewUser: false });
         } catch (error) {
-          console.error("Error in Google OAuth strategy:", error);
+          logger.error(error, "Error in Google OAuth strategy");
           return done(error, undefined);
         }
       },
@@ -184,7 +184,7 @@ passport.serializeUser((user, done) => {
     }
     done(null, user.id);
   } catch (error) {
-    console.error("Serialization error:", error);
+    logger.error(error, "Error during user serialization");
     done(error, null);
   }
 });
@@ -204,8 +204,8 @@ const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
 const server = app.listen(PORT, HOST, () => {
-  console.log(`API server running at http://${HOST}:${PORT}`);
-  console.log(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
+  logger.info(`API server running at http://${HOST}:${PORT}`);
+  logger.info(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
   app.use(mapErrorResponse);
 });
 
@@ -220,11 +220,11 @@ app.use(`${basePath}/v1/user/`, userRoute);
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {
-  console.log(`Received ${signal}. Graceful shutdown...`);
+  logger.info(`Received ${signal}. Graceful shutdown...`);
   server.close(() => {
-    console.log("HTTP server closed.");
+    logger.info("HTTP server closed.");
     pool.end(() => {
-      console.log("Database pool closed.");
+      logger.info("Database pool closed.");
       process.exit(0);
     });
   });

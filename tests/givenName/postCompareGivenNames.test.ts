@@ -11,14 +11,12 @@ describe("Compare Given Names", () => {
   it("200", async () => {
     const cookie = await authAnonymous();
     const namesCandidates = await getNameCandidates(cookie, 2);
-    console.log("🚀 ~ namesCandidates:", namesCandidates);
     await approveName(cookie, namesCandidates[0].givenCustomNameBridgeId);
     await approveName(cookie, namesCandidates[1].givenCustomNameBridgeId);
 
     const createRes1 = await request(app)
       .get("/api/v1/givenName/approved")
       .set("Cookie", cookie);
-    console.log("🚀 ~ createRes1:", createRes1.body);
 
     expect(createRes1.status).toBe(200);
     const approvedNames: GivenName[] = createRes1.body;

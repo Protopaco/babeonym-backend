@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
-import createUser from '../../../db/createUser.js';
-import AuthProvider from '../../../models/AuthProvider.js';
-import { logger } from '../../../utils/logger.js';
+import createUser from "../../../db/createUser.js";
+import AuthProvider from "../../../models/AuthProvider.js";
+import { logger } from "../../../utils/logger.js";
 
 /**
  * @swagger
@@ -38,24 +38,25 @@ import { logger } from '../../../utils/logger.js';
  *               example:
  *                 error: "Failed to create anonymous session"
  */
-router.get('/anonymous', async (req, res) => {
-    // Create an anonymous user session
-    if (req.user) {
-        return res.status(400).json({ error: 'User is already authenticated' });
+router.get("/anonymous", async (req, res) => {
+  // Create an anonymous user session
+  if (req.user) {
+    return res.status(400).json({ error: "User is already authenticated" });
+  }
+
+  const user = await createUser(AuthProvider.ANONYMOUS);
+  logger.info(`Created anonymous user with ID: ${user.id}`);
+
+  req.login(user, { session: true }, (err) => {
+    logger.info("Set-Cookie:", res.getHeader("Set-Cookie"));
+    if (err) {
+      logger.error("Error logging in anonymous user:", err);
+      return res
+        .status(500)
+        .json({ error: "Failed to create anonymous session" });
     }
-
-    const user = await createUser(AuthProvider.ANONYMOUS);
-    logger.info(`Created anonymous user with ID: ${user.id}`);
-
-    req.login(user, { session: true }, (err) => {
-        console.log('Set-Cookie:', res.getHeader('Set-Cookie'));
-        if (err) {
-            logger.error('Error logging in anonymous user:', err);
-            return res.status(500).json({ error: 'Failed to create anonymous session' });
-        }
-        res.status(200).json({ message: 'Anonymous session created', user });
-    });
-
+    res.status(200).json({ message: "Anonymous session created", user });
+  });
 });
 
 export default router;

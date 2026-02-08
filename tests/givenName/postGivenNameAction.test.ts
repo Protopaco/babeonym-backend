@@ -12,7 +12,6 @@ describe("Given Name Action - Approve", () => {
     const nameArray = await getNameCandidates(cookie, 1);
     const name: GivenName = nameArray[0];
 
-    console.log("Candidate Name ID:", name.givenCustomNameBridgeId);
     const postRes = await request(app)
       .post("/api/v1/givenName/action")
       .set("Cookie", cookie)
