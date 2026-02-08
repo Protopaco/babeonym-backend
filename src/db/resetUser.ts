@@ -1,5 +1,5 @@
-import { pool } from "../utils/dbController.js";
-import { logger } from "../utils/logger.js";
+import { pool } from "../utils/dbController";
+import { logger } from "../utils/logger";
 
 export default async (userId: number) => {
   try {

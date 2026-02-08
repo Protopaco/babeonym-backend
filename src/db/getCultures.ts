@@ -1,6 +1,6 @@
-import { pool } from "../utils/dbController.js";
-import Culture from "../models/Culture.js";
-import { logger } from "../utils/logger.js";
+import { pool } from "../utils/dbController";
+import Culture from "../models/Culture";
+import { logger } from "../utils/logger";
 
 export default async (): Promise<Culture[]> => {
   logger.info("Fetching cultures from database");

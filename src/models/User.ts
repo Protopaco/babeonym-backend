@@ -1,4 +1,4 @@
-import AuthProvider from "./AuthProvider.js";
+import AuthProvider from "./AuthProvider";
 
 export default interface User {
   id: number;

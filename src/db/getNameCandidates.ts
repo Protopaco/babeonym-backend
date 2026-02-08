@@ -1,12 +1,12 @@
-import { pool } from "../utils/dbController.js";
-import { logger } from "../utils/logger.js";
-import GivenName from "../models/GivenName.js";
-import Genders, { Gender } from "../models/Gender.js";
+import { pool } from "../utils/dbController";
+import { logger } from "../utils/logger";
+import GivenName from "../models/GivenName";
+import Genders, { GenderType } from "../models/Gender";
 
 export default async (
   userId: number,
   popularity: number | null,
-  genders: Gender[] | null,
+  genders: GenderType[] | null,
   decadeIds: number[] | null,
   limit: number | null,
   includeMeta = false,

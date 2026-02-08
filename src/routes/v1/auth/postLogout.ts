@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * api/v1/auth/logout:
+ * /api/v1/auth/logout:
  *   post:
  *     summary: Log out the current user
  *     description: >

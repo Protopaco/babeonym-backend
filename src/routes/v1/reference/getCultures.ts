@@ -1,14 +1,14 @@
 import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
-import { logger } from "../../../utils/logger.js";
-import getCultures from "../../../db/getCultures.js";
-import Culture from "../../../models/Culture.js";
-import User from "../../../models/User.js";
+import { logger } from "../../../utils/logger";
+import getCultures from "../../../db/getCultures";
+import Culture from "../../../models/Culture";
+import User from "../../../models/User";
 
 /**
  * @swagger
- * api/v1/reference/cultures:
+ * /api/v1/reference/cultures:
  *   get:
  *     summary: Get cultures
  *     description: Returns the list of available cultures.

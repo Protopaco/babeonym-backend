@@ -5,6 +5,36 @@ import { logger } from "../../../utils/logger";
 import deleteUser from "../../../db/deleteUser";
 import User from "../../../models/User";
 
+/**
+ * @swagger
+ * /api/v1/user/me:
+ *   delete:
+ *     summary: Delete current user
+ *     description: Deletes the authenticated user account, logs them out, and destroys the session.
+ *     tags:
+ *       - User
+ *     responses:
+ *       204:
+ *         description: User deleted and session terminated
+ *       401:
+ *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *       500:
+ *         description: Logout failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [message]
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Logout failed
+ */
+
 router.delete(
   "/me",
   ensureAuthenticated,

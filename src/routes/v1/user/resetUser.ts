@@ -5,6 +5,34 @@ import { logger } from "../../../utils/logger";
 import User from "../../../models/User";
 import resetUser from "../../../db/resetUser";
 
+/**
+ * @swagger
+ * /api/v1/user/me/reset:
+ *   post:
+ *     summary: Reset user state
+ *     description: Resets the authenticated user's data to an initial state.
+ *     tags:
+ *       - User
+ *     responses:
+ *       200:
+ *         description: User reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [message]
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User reset successfully
+ *       401:
+ *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ */
+
 router.post(
   "/me/reset",
   ensureAuthenticated,

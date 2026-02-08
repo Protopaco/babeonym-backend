@@ -8,7 +8,7 @@ import User from "../../../models/User";
 
 /**
  * @swagger
- * api/v1/reference/decades:
+ * /api/v1/reference/decades:
  *   get:
  *     summary: Get decades
  *     description: Returns the list of available decades.

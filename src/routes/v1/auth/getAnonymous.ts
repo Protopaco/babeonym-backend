@@ -1,12 +1,12 @@
 import { Router } from "express";
 const router = Router();
-import createUser from "../../../db/createUser.js";
-import AuthProvider from "../../../models/AuthProvider.js";
-import { logger } from "../../../utils/logger.js";
+import createUser from "../../../db/createUser";
+import AuthProvider from "../../../models/AuthProvider";
+import { logger } from "../../../utils/logger";
 
 /**
  * @swagger
- * api/v1/auth/anonymous:
+ * /api/v1/auth/anonymous:
  *   get:
  *     summary: Create an anonymous user session
  *     description: Creates a new anonymous user and logs them in via session cookie.

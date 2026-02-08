@@ -1,6 +1,6 @@
-import { pool } from "../utils/dbController.js";
-import { logger } from "../utils/logger.js";
-import Language from "../models/Language.js";
+import { pool } from "../utils/dbController";
+import { logger } from "../utils/logger";
+import Language from "../models/Language";
 
 export default async (): Promise<Language[]> => {
   logger.info("Fetching languages from database");

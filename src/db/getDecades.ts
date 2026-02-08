@@ -1,6 +1,6 @@
-import { pool } from "../utils/dbController.js";
-import Decade from "../models/Decade.js";
-import { logger } from "../utils/logger.js";
+import { pool } from "../utils/dbController";
+import Decade from "../models/Decade";
+import { logger } from "../utils/logger";
 
 export default async (): Promise<Decade[]> => {
   logger.info("Fetching decades from database");

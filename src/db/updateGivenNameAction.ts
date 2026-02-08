@@ -1,6 +1,6 @@
-import { pool } from "../utils/dbController.js";
-import { logger } from "../utils/logger.js";
-import NameState from "../models/NameState.js";
+import { pool } from "../utils/dbController";
+import { logger } from "../utils/logger";
+import NameState from "../models/NameState";
 
 export default async (
   userId: number,

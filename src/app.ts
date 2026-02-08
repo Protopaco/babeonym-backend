@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import { pinoHttp } from "pino-http";
-import { logger } from "./utils/logger.js";
+import { logger } from "./utils/logger";
 import pgSession from "connect-pg-simple";
 import cors from "cors";
 import swaggerJsdoc from "swagger-jsdoc";
@@ -11,26 +11,26 @@ import passport from "passport";
 import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20";
 import path from "path";
 import { fileURLToPath } from "url";
-import { swaggerSpec } from "./utils/swagger/swaggerSpec.js";
-import { pool } from "./utils/dbController.js";
+import { swaggerSpec } from "./utils/swagger/swaggerSpec";
+import { pool } from "./utils/dbController";
 import * as client from "openid-client";
 import { Strategy as OidcStrategy } from "openid-client/passport";
 
 //middleware
-import mapErrorResponse from "./middleware/mapErrorResponse.js";
+import mapErrorResponse from "./middleware/mapErrorResponse";
 
 //Routes
-import baseRoute from "./routes/v1/base.js";
-import authRoute from "./routes/v1/auth/index.js";
-import referenceRoute from "./routes/v1/reference/index.js";
-import userRoute from "./routes/v1/user/index.js";
-import givenNameRoute from "./routes/v1/givenName/index.js";
+import authRoute from "./routes/v1/auth/index";
+import referenceRoute from "./routes/v1/reference/index";
+import userRoute from "./routes/v1/user/index";
+import givenNameRoute from "./routes/v1/givenName/index";
+import healhRoute from "./routes/v1/health/index";
 
 //Models
-import User from "./models/User.js";
-import getUser from "./db/getUser.js";
-import getUserByForeignId from "./db/getUserByForeignId.js";
-import AuthProvider from "./models/AuthProvider.js";
+import User from "./models/User";
+import getUser from "./db/getUser";
+import getUserByForeignId from "./db/getUserByForeignId";
+import AuthProvider from "./models/AuthProvider";
 
 const basePath = "/api";
 
@@ -49,7 +49,7 @@ app.use(
     customCssUrl: "/swagger-dark.css",
   }),
 );
-app.get("/openapi.json", (req, res) => {
+app.get("/openapion", (req, res) => {
   res.json(swaggerSpec);
 });
 app.use(express.json());
@@ -212,11 +212,11 @@ const server = app.listen(PORT, HOST, () => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(basePath, baseRoute);
 app.use(`${basePath}/v1/auth/`, authRoute);
 app.use(`${basePath}/v1/givenName/`, givenNameRoute);
 app.use(`${basePath}/v1/reference/`, referenceRoute);
 app.use(`${basePath}/v1/user/`, userRoute);
+app.use(`${basePath}/v1/health/`, healhRoute);
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {

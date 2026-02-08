@@ -5,14 +5,14 @@ const Theme = {
   PINK: "pink",
 };
 
-export type Theme = (typeof Theme)[keyof typeof Theme];
+export type ThemeType = (typeof Theme)[keyof typeof Theme];
 
-const parseTheme = (value: unknown): Theme | null => {
+const parseTheme = (value: unknown): ThemeType | null => {
   if (
     typeof value === "string" &&
     Object.values(Theme).includes(value as any)
   ) {
-    return value as Theme;
+    return value as ThemeType;
   }
   return null;
 };

@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import passport from "passport";
 import dotenv from "dotenv";
 import linkAuthProvider from "../../../db/linkAuthProvider";
-import User from "../../../models/User.js";
-import { logger } from "../../../utils/logger.js";
-import AuthProvider from "../../../models/AuthProvider.js";
+import User from "../../../models/User";
+import { logger } from "../../../utils/logger";
+import AuthProvider from "../../../models/AuthProvider";
 
 dotenv.config();
 const router = express.Router();
@@ -13,7 +13,7 @@ const frontEndBaseUrl =
 
 /**
  * @swagger
- * api/v1/auth/google/callback:
+ * /api/v1/auth/google/callback:
  *   get:
  *     summary: Handle Google OAuth callback
  *     description: >

@@ -170,6 +170,58 @@
             "example": "Amish"
           }
         }
+      },
+      "UserActionHistory": {
+        "type": "object",
+        "required": [
+          "givenName",
+          "state",
+          "dateUpdated",
+          "givenCustomNameBridgeId"
+        ],
+        "properties": {
+          "givenName": {
+            "type": "string",
+            "example": "Oliver"
+          },
+          "state": {
+            "type": "string",
+            "description": "NameState enum value",
+            "example": "APPROVED"
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-02-01T18:42:00Z"
+          },
+          "givenCustomNameBridgeId": {
+            "type": "number",
+            "example": 123
+          }
+        }
+      },
+      "UserSettings": {
+        "type": "object",
+        "required": [
+          "userId",
+          "theme",
+          "surName"
+        ],
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 123
+          },
+          "theme": {
+            "type": "string",
+            "description": "Theme enum key",
+            "example": "LIGHT"
+          },
+          "surName": {
+            "type": "string",
+            "example": "Stevens"
+          }
+        }
       }
     },
     "responses": {
@@ -206,7 +258,7 @@
     }
   },
   "paths": {
-    "api/v1/auth/anonymous": {
+    "/api/v1/auth/anonymous": {
       "get": {
         "summary": "Create an anonymous user session",
         "description": "Creates a new anonymous user and logs them in via session cookie.",
@@ -262,7 +314,7 @@
         }
       }
     },
-    "api/v1/auth/google": {
+    "/api/v1/auth/google": {
       "get": {
         "summary": "Start Google OAuth login",
         "description": "Redirects the user to Google OAuth consent screen.",
@@ -276,7 +328,7 @@
         }
       }
     },
-    "api/v1/auth/google/callback": {
+    "/api/v1/auth/google/callback": {
       "get": {
         "summary": "Handle Google OAuth callback",
         "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
@@ -324,7 +376,7 @@
         }
       }
     },
-    "api/v1/auth/microsoft/callback": {
+    "/api/v1/auth/microsoft/callback": {
       "get": {
         "summary": "Handle Microsoft OAuth callback",
         "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
@@ -358,7 +410,7 @@
         }
       }
     },
-    "api/v1/auth/logout": {
+    "/api/v1/auth/logout": {
       "post": {
         "summary": "Log out the current user",
         "description": "Logs out the currently authenticated user and destroys the session.\n",
@@ -410,38 +462,7 @@
         }
       }
     },
-    "/api/": {
-      "get": {
-        "operationId": "getRoot",
-        "tags": [
-          "Health"
-        ],
-        "summary": "Health check for API",
-        "responses": {
-          "200": {
-            "description": "Returns a simple \"I'm here\" message"
-          }
-        }
-      }
-    },
-    "/api/health": {
-      "get": {
-        "operationId": "getHealthCheck",
-        "tags": [
-          "Health"
-        ],
-        "summary": "Detailed health check including database",
-        "responses": {
-          "200": {
-            "description": "Service is healthy"
-          },
-          "503": {
-            "description": "Service is unhealthy"
-          }
-        }
-      }
-    },
-    "api/v1/givenName/approved": {
+    "/api/v1givenName/approved": {
       "get": {
         "summary": "Get approved given names",
         "description": "Returns the authenticated user's approved given names.",
@@ -475,7 +496,7 @@
         }
       }
     },
-    "api/v1/givenName/search": {
+    "/api/v1/givenName/search": {
       "get": {
         "summary": "Search given names",
         "description": "Searches given names for the authenticated user using a text query.\n",
@@ -549,7 +570,7 @@
         }
       }
     },
-    "api/v1/givenName/candidates": {
+    "/api/v1/givenName/candidates": {
       "get": {
         "summary": "Get given name candidates",
         "description": "Returns candidate given names for the authenticated user based on optional filters.",
@@ -630,7 +651,7 @@
         }
       }
     },
-    "api/v1/givenName/compare": {
+    "/api/v1/givenName/compare": {
       "post": {
         "summary": "Compare two given names",
         "description": "Records a comparison result between two given names for the authenticated user.",
@@ -713,7 +734,7 @@
         }
       }
     },
-    "api/v1/givenName/custom": {
+    "/api/v1/givenName/custom": {
       "post": {
         "summary": "Add a custom given name",
         "description": "Adds a user-defined custom given name for the authenticated user.",
@@ -790,7 +811,7 @@
         }
       }
     },
-    "api/v1/givenName/action": {
+    "/api/v1/givenName/action": {
       "post": {
         "summary": "Update given name state",
         "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
@@ -878,7 +899,38 @@
         }
       }
     },
-    "api/v1/reference/cultures": {
+    "/api/v1/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Returns service health status.",
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service is unhealthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reference/cultures": {
       "get": {
         "summary": "Get cultures",
         "description": "Returns the list of available cultures.",
@@ -920,7 +972,7 @@
         }
       }
     },
-    "api/v1/reference/decades": {
+    "/api/v1/reference/decades": {
       "get": {
         "summary": "Get decades",
         "description": "Returns the list of available decades.",
@@ -997,6 +1049,289 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1user/me": {
+      "delete": {
+        "summary": "Delete current user",
+        "description": "Deletes the authenticated user account, logs them out, and destroys the session.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted and session terminated"
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Logout failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logout failed"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/me": {
+      "get": {
+        "summary": "Get current user",
+        "description": "Returns the currently authenticated user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "user"
+                  ],
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/actionHistory": {
+      "get": {
+        "summary": "Get user action history",
+        "description": "Returns the authenticated user's given-name action history.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User action history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "actionHistory"
+                  ],
+                  "properties": {
+                    "actionHistory": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UserActionHistory"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found in request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/me/reset": {
+      "post": {
+        "summary": "Reset user state",
+        "description": "Resets the authenticated user's data to an initial state.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User reset successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/settings": {
+      "put": {
+        "summary": "Update user settings",
+        "description": "Updates the authenticated user's settings such as theme and surname.",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "theme",
+                  "surName"
+                ],
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "description": "Theme identifier"
+                  },
+                  "surName": {
+                    "type": "string",
+                    "description": "User surname"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User settings updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "settings"
+                  ],
+                  "properties": {
+                    "settings": {
+                      "$ref": "#/components/schemas/UserSettings"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (missing fields, invalid theme, or inappropriate language)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update user settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An error occurred while updating settings"
+                    }
+                  }
                 }
               }
             }

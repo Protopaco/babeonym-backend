@@ -13,7 +13,7 @@ const frontEndBaseUrl =
 
 /**
  * @swagger
- * api/v1/auth/microsoft/callback:
+ * /api/v1/auth/microsoft/callback:
  *   get:
  *     summary: Handle Microsoft OAuth callback
  *     description: >
@@ -39,7 +39,6 @@ const frontEndBaseUrl =
  *         description: Redirect to frontend (success, linking flow, or error)
  */
 
-// /api/v1/auth/microsoft/callback
 router.get("/microsoft/callback", async (req, res, next) => {
   const cookieUser = req.user as User | undefined;
 

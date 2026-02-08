@@ -3,7 +3,7 @@ const router = Router();
 import passport from "passport";
 /**
  * @swagger
- * api/v1/auth/google:
+ * /api/v1/auth/google:
  *   get:
  *     summary: Start Google OAuth login
  *     description: Redirects the user to Google OAuth consent screen.

@@ -8,6 +8,68 @@ import UserSettings from "../../../models/UserSettings";
 import User from "../../../models/User";
 import { parseTheme } from "../../../models/Theme";
 
+/**
+ * @swagger
+ * /api/v1/user/settings:
+ *   put:
+ *     summary: Update user settings
+ *     description: Updates the authenticated user's settings such as theme and surname.
+ *     tags:
+ *       - User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [theme, surName]
+ *             properties:
+ *               theme:
+ *                 type: string
+ *                 description: Theme identifier
+ *               surName:
+ *                 type: string
+ *                 description: User surname
+ *     responses:
+ *       200:
+ *         description: User settings updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [settings]
+ *               properties:
+ *                 settings:
+ *                   $ref: '#/components/schemas/UserSettings'
+ *       400:
+ *         description: Invalid input (missing fields, invalid theme, or inappropriate language)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [error]
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       401:
+ *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *       500:
+ *         description: Failed to update user settings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [error]
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: An error occurred while updating settings
+ */
+
 router.put(
   "/settings",
   ensureAuthenticated,

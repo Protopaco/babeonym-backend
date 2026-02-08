@@ -8,7 +8,7 @@ import GivenName from "../../../models/GivenName.js";
 
 /**
  * @swagger
- * api/v1/givenName/search:
+ * /api/v1/givenName/search:
  *   get:
  *     summary: Search given names
  *     description: >

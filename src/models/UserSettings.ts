@@ -1,7 +1,7 @@
-import Theme from "./Theme";
+import { ThemeType } from "./Theme";
 
 export default interface UserSettings {
   userId: number;
-  theme: keyof typeof Theme;
+  theme: ThemeType;
   surName: string;
 }

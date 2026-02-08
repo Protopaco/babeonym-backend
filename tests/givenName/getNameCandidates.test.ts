@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import request from "supertest";
 import app from "../../src/app.js";
 import authAnonymous from "../helpers/authAnonymous.js";
-import Genders from "../../src/models/Genders.js";
+import Gender from "../../src/models/Gender.js";
 import cleanUp from "../helpers/cleanUp.js";
 
 describe("Get Given Names By User ID", () => {
@@ -27,7 +27,7 @@ describe("Get Given Names By User ID", () => {
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(
-      res.body.every((response: any) => response.gender === Genders.FEMALE),
+      res.body.every((response: any) => response.gender === Gender.FEMALE),
     ).toBe(true);
   });
 

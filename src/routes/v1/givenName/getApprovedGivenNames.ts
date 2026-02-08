@@ -2,13 +2,13 @@ import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
-import { logger } from "../../../utils/logger.js";
+import { logger } from "../../../utils/logger";
 import User from "../../../models/User";
-import GivenName from "../../../models/GivenName.js";
+import GivenName from "../../../models/GivenName";
 
 /**
  * @swagger
- * api/v1/givenName/approved:
+ * /api/v1/givenName/approved:
  *   get:
  *     summary: Get approved given names
  *     description: Returns the authenticated user's approved given names.

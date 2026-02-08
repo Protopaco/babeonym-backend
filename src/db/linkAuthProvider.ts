@@ -1,6 +1,6 @@
-import { logger } from "../utils/logger.js";
-import { pool } from "../utils/dbController.js";
-import { AuthProvider } from "../models/AuthProvider.js";
+import { logger } from "../utils/logger";
+import { pool } from "../utils/dbController";
+import { AuthProvider } from "../models/AuthProvider";
 
 export default async (
   userId: number,
