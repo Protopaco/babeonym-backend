@@ -462,7 +462,7 @@
         }
       }
     },
-    "/api/v1givenName/approved": {
+    "/api/v1/givenName/approved": {
       "get": {
         "summary": "Get approved given names",
         "description": "Returns the authenticated user's approved given names.",
@@ -1056,7 +1056,7 @@
         }
       }
     },
-    "/api/v1user/me": {
+    "/api/v1/user/me": {
       "delete": {
         "summary": "Delete current user",
         "description": "Deletes the authenticated user account, logs them out, and destroys the session.",
@@ -1097,9 +1097,7 @@
             }
           }
         }
-      }
-    },
-    "/api/v1/user/me": {
+      },
       "get": {
         "summary": "Get current user",
         "description": "Returns the currently authenticated user.",
