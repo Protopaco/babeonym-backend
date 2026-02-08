@@ -6,38 +6,41 @@ import { logger } from "../../../utils/logger.js";
 
 /**
  * @swagger
- * /api/v1/auth/anonymous:
+ * /auth/anonymous:
  *   get:
- *     operationId: createAnonymousSession
- *     tags: [Auth]
  *     summary: Create an anonymous user session
- *     description: Creates a new anonymous user session without requiring authentication
+ *     description: Creates a new anonymous user and logs them in via session cookie.
+ *     tags:
+ *       - Auth
  *     responses:
  *       200:
- *         description: Anonymous session created successfully
+ *         description: Anonymous session created
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [message, user]
  *               properties:
  *                 message:
  *                   type: string
- *                   description: Success message
- *               example:
- *                 message: "Anonymous session created"
- *       500:
- *         description: Failed to create anonymous session
+ *                   example: Anonymous session created
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       400:
+ *         description: User is already authenticated
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [error]
  *               properties:
  *                 error:
  *                   type: string
- *                   description: Error message
- *               example:
- *                 error: "Failed to create anonymous session"
+ *                   example: User is already authenticated
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
+
 router.get("/anonymous", async (req, res) => {
   // Create an anonymous user session
   if (req.user) {
@@ -48,7 +51,7 @@ router.get("/anonymous", async (req, res) => {
   logger.info(`Created anonymous user with ID: ${user.id}`);
 
   req.login(user, { session: true }, (err) => {
-    logger.info("Set-Cookie:", res.getHeader("Set-Cookie"));
+    logger.info(`Logging in anonymous user with ID: ${user.id}`);
     if (err) {
       logger.error("Error logging in anonymous user:", err);
       return res

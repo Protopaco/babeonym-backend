@@ -15,67 +15,196 @@
       "bearerAuth": []
     }
   ],
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "db_error",
+              "server_error"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 123
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "authProvider": {
+            "type": "string",
+            "nullable": true,
+            "description": "AuthProvider enum value"
+          },
+          "theme": {
+            "type": "string",
+            "nullable": true
+          },
+          "surName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request (DB constraint violation)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Conflict (duplicate entry)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
   "paths": {
-    "/api/v1/auth/anonymous": {
+    "/auth/anonymous": {
       "get": {
-        "operationId": "createAnonymousSession",
+        "summary": "Create an anonymous user session",
+        "description": "Creates a new anonymous user and logs them in via session cookie.",
         "tags": [
           "Auth"
         ],
-        "summary": "Create an anonymous user session",
-        "description": "Creates a new anonymous user session without requiring authentication",
         "responses": {
           "200": {
-            "description": "Anonymous session created successfully",
+            "description": "Anonymous session created",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "message",
+                    "user"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
-                      "description": "Success message"
+                      "example": "Anonymous session created"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
                     }
-                  },
-                  "example": {
-                    "message": "Anonymous session created"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User is already authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "User is already authenticated"
+                    }
                   }
                 }
               }
             }
           },
           "500": {
-            "description": "Failed to create anonymous session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  },
-                  "example": {
-                    "error": "Failed to create anonymous session"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
     },
-    "/api/v1/auth/google": {
+    "/auth/google": {
       "get": {
-        "operationId": "initiateGoogleAuth",
+        "summary": "Start Google OAuth login",
+        "description": "Redirects the user to Google OAuth consent screen.",
         "tags": [
           "Auth"
         ],
-        "summary": "Redirect user to Google for authentication",
         "responses": {
           "302": {
-            "description": "Redirects to Google OAuth"
+            "description": "Redirect to Google OAuth provider"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "summary": "Handle Google OAuth callback",
+        "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth authorization code returned by Google"
+          },
+          {
+            "in": "query",
+            "name": "error",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth error returned by Google"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to frontend (success, linking flow, or error)"
           }
         }
       }
@@ -484,6 +613,5 @@
       }
     }
   },
-  "components": {},
   "tags": []
 }
