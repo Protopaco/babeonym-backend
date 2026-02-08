@@ -1,40 +1,49 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 const router = Router();
-import getReferenceDecades from '../../../db/getDecades.js'
-import ensureAuthenticated from '../../../middleware/ensureAuthenticated.js';
-import { logger } from '../../../utils/logger.js';
+import getReferenceDecades from "../../../db/getDecades";
+import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
+import { logger } from "../../../utils/logger";
+import Decade from "../../../models/Decade";
+import User from "../../../models/User";
 
 /**
  * @swagger
- * /api/v1/reference/decades:
+ * api/v1/reference/decades:
  *   get:
- *     operationId: getReferenceDecades
- *     tags: [Reference]
- *     summary: Get available decades for reference
- *     description: Retrieves a list of decades available in the reference database
+ *     summary: Get decades
+ *     description: Returns the list of available decades.
+ *     tags:
+ *       - Reference
  *     responses:
  *       200:
- *         description: Successfully retrieved reference decades
+ *         description: List of decades
  *         content:
  *           application/json:
  *             schema:
  *               type: object
- *       500:
- *         description: Failed to fetch reference decades
- *         content:
- *           application/json:
- *             schema:
- *               type: object
+ *               required: [decades]
  *               properties:
- *                 error:
- *                   type: string
- *               example:
- *                 error: Failed to fetch decades
+ *                 decades:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Decade'
+ *       401:
+ *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
  */
-router.get('/decades', ensureAuthenticated, async (req: Request, res: Response) => {
-    const decades = await getReferenceDecades();
-    logger.debug(decades, "Fetched reference decades");
-    res.status(200).json({ decades });
-});
 
-export default router;  
+router.get(
+  "/decades",
+  ensureAuthenticated,
+  async (req: Request, res: Response) => {
+    const userId = (req.user as User).id;
+    logger.info(`Reference Decades endpoint called for user ${userId}`);
+    const decades: Decade[] = await getReferenceDecades();
+    res.status(200).json({ decades });
+  },
+);
+
+export default router;

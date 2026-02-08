@@ -101,6 +101,52 @@ const swaggerOptions = {
             message: { type: "string", example: "Not authenticated" },
           },
         },
+        Decade: {
+          type: "object",
+          required: ["id", "decade", "label"],
+          properties: {
+            id: {
+              type: "number",
+              example: 1,
+            },
+            decade: {
+              type: "number",
+              example: 1990,
+            },
+            label: {
+              type: "string",
+              example: "1990s",
+            },
+          },
+        },
+        Language: {
+          type: "object",
+          required: ["id", "label"],
+          properties: {
+            id: {
+              type: "number",
+              example: 1,
+            },
+            label: {
+              type: "string",
+              example: "French",
+            },
+          },
+        },
+        Culture: {
+          type: "object",
+          required: ["id", "label"],
+          properties: {
+            id: {
+              type: "number",
+              example: 1,
+            },
+            label: {
+              type: "string",
+              example: "Amish",
+            },
+          },
+        },
       },
       responses: {
         BadRequest: {

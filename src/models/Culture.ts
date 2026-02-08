@@ -1,4 +1,4 @@
-export interface Culture {
-    id: number;
-    name: string;
+export default interface Culture {
+  id: number;
+  label: string;
 }

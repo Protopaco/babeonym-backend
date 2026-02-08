@@ -3,7 +3,8 @@ const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
 import { logger } from "../../../utils/logger.js";
 import getCultures from "../../../db/getCultures.js";
-import { Culture } from "../../../models/Culture.js";
+import Culture from "../../../models/Culture.js";
+import User from "../../../models/User.js";
 
 /**
  * @swagger
@@ -38,7 +39,7 @@ router.get(
   "/cultures",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
-    const userId = (req.user as any).id;
+    const userId = (req.user as User).id;
     logger.info("Received request for cultures from user ID: " + userId);
     const cultures: Culture[] = await getCultures();
     res.status(200).json({ cultures });

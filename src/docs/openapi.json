@@ -114,6 +114,62 @@
             "example": "Not authenticated"
           }
         }
+      },
+      "Decade": {
+        "type": "object",
+        "required": [
+          "id",
+          "decade",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "decade": {
+            "type": "number",
+            "example": 1990
+          },
+          "label": {
+            "type": "string",
+            "example": "1990s"
+          }
+        }
+      },
+      "Language": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "label": {
+            "type": "string",
+            "example": "French"
+          }
+        }
+      },
+      "Culture": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "label": {
+            "type": "string",
+            "example": "Amish"
+          }
+        }
       }
     },
     "responses": {
@@ -864,39 +920,83 @@
         }
       }
     },
-    "/api/v1/reference/decades": {
+    "api/v1/reference/decades": {
       "get": {
-        "operationId": "getReferenceDecades",
+        "summary": "Get decades",
+        "description": "Returns the list of available decades.",
         "tags": [
           "Reference"
         ],
-        "summary": "Get available decades for reference",
-        "description": "Retrieves a list of decades available in the reference database",
         "responses": {
           "200": {
-            "description": "Successfully retrieved reference decades",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Failed to fetch reference decades",
+            "description": "List of decades",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "decades"
+                  ],
                   "properties": {
-                    "error": {
-                      "type": "string"
+                    "decades": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Decade"
+                      }
                     }
-                  },
-                  "example": {
-                    "error": "Failed to fetch decades"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reference/languages": {
+      "get": {
+        "summary": "Get languages",
+        "description": "Returns the list of available languages.",
+        "tags": [
+          "Reference"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of languages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "languages"
+                  ],
+                  "properties": {
+                    "languages": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Language"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
                 }
               }
             }

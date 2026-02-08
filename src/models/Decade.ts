@@ -1,5 +1,5 @@
-export interface Decade {
-    id: number,
-    decade: number,
-    label: string
-};
+export default interface Decade {
+  id: number;
+  decade: number;
+  label: string;
+}
