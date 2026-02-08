@@ -5,6 +5,59 @@ import compareGivenNames from "../../../db/compareGivenNames";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
 
+/**
+ * @swagger
+ * /givenName/compare:
+ *   post:
+ *     summary: Compare two given names
+ *     description: Records a comparison result between two given names for the authenticated user.
+ *     tags:
+ *       - GivenName
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [winnerId, loserId]
+ *             properties:
+ *               winnerId:
+ *                 type: number
+ *                 example: 12
+ *               loserId:
+ *                 type: number
+ *                 example: 34
+ *     responses:
+ *       200:
+ *         description: Comparison recorded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [message]
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Given name comparison updated successfully
+ *       400:
+ *         description: Invalid winnerId or loserId
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [error]
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid winnerId or loserId
+ *       401:
+ *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ */
+
 router.post(
   "/compare",
   ensureAuthenticated,

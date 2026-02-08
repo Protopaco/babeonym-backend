@@ -1,7 +1,6 @@
 import { Router } from "express";
 const router = Router();
 
-import getValidRouter from "./getValid.js";
 import getGoogleRouter from "./getGoogle.js";
 import getGoogleCallbackRouter from "./getGoogleCallback.js";
 import getAnonymousRouter from "./getAnonymous.js";
@@ -9,7 +8,6 @@ import getMicrosoftRouter from "./getMicrosoft.js";
 import getMicrosoftCallbackRouter from "./getMicrosoftCallback.js";
 import postLogoutRouter from "./postLogout.js";
 
-router.use(getValidRouter);
 router.use(getAnonymousRouter);
 router.use(postLogoutRouter);
 router.use(getGoogleRouter);

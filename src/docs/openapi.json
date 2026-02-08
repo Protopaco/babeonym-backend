@@ -69,6 +69,51 @@
             "nullable": true
           }
         }
+      },
+      "GivenName": {
+        "type": "object",
+        "required": [
+          "givenName",
+          "givenCustomNameBridgeId",
+          "rating"
+        ],
+        "properties": {
+          "givenName": {
+            "type": "string",
+            "example": "Oliver"
+          },
+          "givenCustomNameBridgeId": {
+            "type": "number",
+            "example": 42
+          },
+          "rating": {
+            "type": "number",
+            "example": 1000
+          },
+          "percentile": {
+            "type": "number",
+            "nullable": true,
+            "example": 92
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true,
+            "description": "Key of Gender enum",
+            "example": "male"
+          }
+        }
+      },
+      "NotAuthenticatedResponse": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Not authenticated"
+          }
+        }
       }
     },
     "responses": {
@@ -209,68 +254,79 @@
         }
       }
     },
-    "/api/v1/auth/valid": {
+    "/auth/microsoft": {
       "get": {
-        "operationId": "checkAuthValidity",
+        "summary": "Start Microsoft OAuth login",
+        "description": "Redirects the user to Microsoft OAuth consent screen.",
         "tags": [
           "Auth"
         ],
-        "summary": "Check if the current user session is valid",
-        "description": "Validates whether a user is currently authenticated",
         "responses": {
-          "200": {
-            "description": "Authentication status returned successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "valid": {
-                      "type": "boolean",
-                      "description": "Whether the user is authenticated"
-                    },
-                    "anonymous": {
-                      "type": "boolean",
-                      "description": "Whether the user is anonymous (only present if valid is true)"
-                    }
-                  },
-                  "example": {
-                    "valid": true,
-                    "anonymous": true
-                  }
-                }
-              }
-            }
+          "302": {
+            "description": "Redirect to Microsoft OAuth provider"
           }
         }
       }
     },
-    "/api/v1/auth/logout": {
-      "post": {
-        "operationId": "logoutUser",
+    "/auth/microsoft/callback": {
+      "get": {
+        "summary": "Handle Microsoft OAuth callback",
+        "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
         "tags": [
           "Auth"
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth authorization code returned by Microsoft"
+          },
+          {
+            "in": "query",
+            "name": "error",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth error returned by Microsoft"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to frontend (success, linking flow, or error)"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
         "summary": "Log out the current user",
-        "description": "Ends the authenticated user session and clears the session cookie",
+        "description": "Logs out the currently authenticated user and destroys the session.\n",
+        "tags": [
+          "Auth"
+        ],
         "responses": {
           "204": {
-            "description": "Logged out successfully"
+            "description": "Logout successful"
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
-                    "error": {
+                    "message": {
                       "type": "string",
-                      "description": "Error message"
+                      "example": "Not authenticated"
                     }
-                  },
-                  "example": {
-                    "error": "Unauthorized"
                   }
                 }
               }
@@ -282,14 +338,14 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
-                      "description": "Error message"
+                      "example": "Logout failed"
                     }
-                  },
-                  "example": {
-                    "message": "Logout failed"
                   }
                 }
               }
@@ -329,78 +385,33 @@
         }
       }
     },
-    "/api/v1/givenName/approved": {
+    "/givenName/approved": {
       "get": {
-        "summary": "Get approved given names for authenticated user",
-        "description": "Retrieves all approved given names for the currently authenticated user",
+        "summary": "Get approved given names",
+        "description": "Returns the authenticated user's approved given names.",
         "tags": [
-          "Given Name"
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
+          "GivenName"
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved approved given names",
+            "description": "Approved given names",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer",
-                        "description": "The given name ID",
-                        "example": 1
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "The given name",
-                        "example": "Sophia"
-                      },
-                      "approvedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "description": "When the name was approved",
-                        "example": "2026-01-31T10:30:00Z"
-                      }
-                    }
+                    "$ref": "#/components/schemas/GivenName"
                   }
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized - Authentication required",
+            "description": "Not authenticated",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Authentication required"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Failed to fetch approved given names"
-                    }
-                  }
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
                 }
               }
             }
@@ -408,14 +419,251 @@
         }
       }
     },
-    "/api/v1/givenName/custom": {
-      "post": {
-        "operationId": "addCustomGivenName",
+    "/givenName/search": {
+      "get": {
+        "summary": "Search given names",
+        "description": "Searches given names for the authenticated user using a text query.\n",
         "tags": [
-          "Given Name"
+          "GivenName"
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search text for given names"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching given names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GivenName"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required search query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Query parameter 'search' is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/givenName/candidates": {
+      "get": {
+        "summary": "Get given name candidates",
+        "description": "Returns candidate given names for the authenticated user based on optional filters.",
+        "tags": [
+          "GivenName"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "popularity",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Popularity filter"
+          },
+          {
+            "in": "query",
+            "name": "genders",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of genders"
+          },
+          {
+            "in": "query",
+            "name": "decadeIds",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated decade IDs"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Maximum number of results"
+          },
+          {
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated include options (e.g. meta)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Candidate given names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GivenName"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/givenName/compare": {
+      "post": {
+        "summary": "Compare two given names",
+        "description": "Records a comparison result between two given names for the authenticated user.",
+        "tags": [
+          "GivenName"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "winnerId",
+                  "loserId"
+                ],
+                "properties": {
+                  "winnerId": {
+                    "type": "number",
+                    "example": 12
+                  },
+                  "loserId": {
+                    "type": "number",
+                    "example": 34
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comparison recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Given name comparison updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid winnerId or loserId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid winnerId or loserId"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/givenName/custom": {
+      "post": {
         "summary": "Add a custom given name",
-        "description": "Adds a custom given name for the authenticated user",
+        "description": "Adds a user-defined custom given name for the authenticated user.",
+        "tags": [
+          "GivenName"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -428,12 +676,9 @@
                 "properties": {
                   "customGivenName": {
                     "type": "string",
-                    "description": "The custom given name to add"
+                    "example": "Aurelius"
                   }
                 }
-              },
-              "example": {
-                "customGivenName": "Alex"
               }
             }
           }
@@ -445,53 +690,131 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "Custom given name added successfully"
                     }
                   }
-                },
-                "example": {
-                  "message": "Custom given name added successfully"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid custom given name",
+            "description": "Invalid or inappropriate custom given name",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "error"
+                  ],
                   "properties": {
                     "error": {
                       "type": "string"
                     }
                   }
-                },
-                "example": {
-                  "error": "Invalid custom given name"
                 }
               }
             }
           },
           "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Failed to add custom given name",
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/givenName/action": {
+      "post": {
+        "summary": "Update given name state",
+        "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
+        "tags": [
+          "GivenName"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "givenCustomNameBridgeId",
+                  "newState"
+                ],
+                "properties": {
+                  "givenCustomNameBridgeId": {
+                    "type": "number",
+                    "example": 123
+                  },
+                  "newState": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVED",
+                      "REJECTED",
+                      "SNOOZED"
+                    ],
+                    "example": "APPROVED"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Given name action updated successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
-                    "error": {
-                      "type": "string"
+                    "message": {
+                      "type": "string",
+                      "example": "Given name action updated successfully"
                     }
                   }
-                },
-                "example": {
-                  "error": "Failed to add custom given name"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error"
+                  ],
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid request parameters"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
                 }
               }
             }

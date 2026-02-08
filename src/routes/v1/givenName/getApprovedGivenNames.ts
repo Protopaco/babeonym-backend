@@ -4,60 +4,31 @@ import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User";
+import GivenName from "../../../models/GivenName.js";
 
 /**
  * @swagger
- * /api/v1/givenName/approved:
+ * /givenName/approved:
  *   get:
- *     summary: Get approved given names for authenticated user
- *     description: Retrieves all approved given names for the currently authenticated user
+ *     summary: Get approved given names
+ *     description: Returns the authenticated user's approved given names.
  *     tags:
- *       - Given Name
- *     security:
- *       - bearerAuth: []
+ *       - GivenName
  *     responses:
  *       200:
- *         description: Successfully retrieved approved given names
+ *         description: Approved given names
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     description: The given name ID
- *                     example: 1
- *                   name:
- *                     type: string
- *                     description: The given name
- *                     example: "Sophia"
- *                   approvedAt:
- *                     type: string
- *                     format: date-time
- *                     description: When the name was approved
- *                     example: "2026-01-31T10:30:00Z"
+ *                 $ref: '#/components/schemas/GivenName'
  *       401:
- *         description: Unauthorized - Authentication required
+ *         description: Not authenticated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "Authentication required"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: "Failed to fetch approved given names"
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
  */
 
 router.get(
@@ -68,8 +39,7 @@ router.get(
     logger.info(
       `Received request for approved given names from user ID: ${userId}`,
     );
-    const approvedGivenNames = await getApprovedGivenNames(userId);
-    logger.debug(approvedGivenNames);
+    const approvedGivenNames: GivenName[] = await getApprovedGivenNames(userId);
     res.status(200).json(approvedGivenNames);
   },
 );

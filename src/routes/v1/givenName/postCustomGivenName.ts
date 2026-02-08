@@ -8,26 +8,23 @@ import isBadWord from "../../../utils/isBadWord.js";
 
 /**
  * @swagger
- * /api/v1/givenName/custom:
+ * /givenName/custom:
  *   post:
- *     operationId: addCustomGivenName
- *     tags: [Given Name]
  *     summary: Add a custom given name
- *     description: Adds a custom given name for the authenticated user
+ *     description: Adds a user-defined custom given name for the authenticated user.
+ *     tags:
+ *       - GivenName
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - customGivenName
+ *             required: [customGivenName]
  *             properties:
  *               customGivenName:
  *                 type: string
- *                 description: The custom given name to add
- *           example:
- *             customGivenName: "Alex"
+ *                 example: "Aurelius"
  *     responses:
  *       200:
  *         description: Custom given name added successfully
@@ -35,41 +32,36 @@ import isBadWord from "../../../utils/isBadWord.js";
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [message]
  *               properties:
  *                 message:
  *                   type: string
- *             example:
- *               message: "Custom given name added successfully"
+ *                   example: Custom given name added successfully
  *       400:
- *         description: Invalid custom given name
+ *         description: Invalid or inappropriate custom given name
  *         content:
  *           application/json:
  *             schema:
  *               type: object
+ *               required: [error]
  *               properties:
  *                 error:
  *                   type: string
- *             example:
- *               error: "Invalid custom given name"
  *       401:
- *         description: Unauthorized
- *       500:
- *         description: Failed to add custom given name
+ *         description: Not authenticated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *             example:
- *               error: "Failed to add custom given name"
+ *               $ref: '#/components/schemas/NotAuthenticatedResponse'
  */
+
 router.post(
   "/custom",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
-    logger.debug(req.body);
+    const userId = (req.user as User).id;
+    logger.info("Custom given name request by user ID: " + userId);
+
     const { customGivenName } = req.body;
     if (!customGivenName || typeof customGivenName !== "string") {
       return res.status(400).json({ error: "Invalid custom given name" });
@@ -81,7 +73,6 @@ router.post(
         .json({ error: "customGivenName contains inappropriate language" });
     }
 
-    const userId = (req.user as User).id;
     await addCustomGivenName(userId, customGivenName);
     res.status(200).json({ message: "Custom given name added successfully" });
   },

@@ -11,6 +11,34 @@ const router = express.Router();
 const frontEndBaseUrl =
   process.env.FRONTEND_BASE_URL || "http://localhost:4200";
 
+/**
+ * @swagger
+ * /auth/microsoft/callback:
+ *   get:
+ *     summary: Handle Microsoft OAuth callback
+ *     description: >
+ *       Handles the Microsoft OAuth callback, links or logs in a user as needed,
+ *       and redirects to the frontend with success or error state.
+ *     tags:
+ *       - Auth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: OAuth authorization code returned by Microsoft
+ *       - in: query
+ *         name: error
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: OAuth error returned by Microsoft
+ *     responses:
+ *       302:
+ *         description: Redirect to frontend (success, linking flow, or error)
+ */
+
 // /api/v1/auth/microsoft/callback
 router.get("/microsoft/callback", async (req, res, next) => {
   const cookieUser = req.user as User | undefined;
