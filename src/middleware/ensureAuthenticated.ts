@@ -11,5 +11,5 @@ export default function ensureAuthenticated(
     return next();
   }
   logger.debug("Unauthenticated access attempt");
-  return res.status(401).json({ message: "Not authenticated" });
+  return res.status(401).end();
 }

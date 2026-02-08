@@ -43,7 +43,7 @@ router.post("/logout", ensureAuthenticated, (req: Request, res: Response) => {
   req.logout(function (err) {
     if (err) {
       logger.error(err);
-      return res.status(500).json({ message: "Logout failed" });
+      res.status(500).end();
     }
     req.session?.destroy(() => {
       logger.info(req.user, "User logged out successfully");
