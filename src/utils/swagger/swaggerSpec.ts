@@ -195,6 +195,77 @@ const swaggerOptions = {
             },
           },
         },
+        EtymologyLanguage: {
+          type: "object",
+          required: ["id", "label", "flag"],
+          properties: {
+            id: { type: "integer", example: 4 },
+            label: { type: "string", example: "Arabic" },
+            flag: { type: "string", nullable: true, example: "🇸🇦" },
+          },
+        },
+
+        EtymologyCulture: {
+          type: "object",
+          required: ["id", "label"],
+          properties: {
+            id: { type: "integer", example: 26 },
+            label: { type: "string", example: "Persian" },
+          },
+        },
+
+        EtymologyMeaning: {
+          type: "object",
+          required: ["short", "long", "dateCreated", "dateUpdated"],
+          properties: {
+            short: {
+              type: "string",
+              nullable: true,
+              example: "knowledgeable, wise",
+            },
+            long: {
+              type: "string",
+              nullable: true,
+              example: "Derived from Arabic meaning one who knows or is aware.",
+            },
+            dateCreated: {
+              type: "string",
+              format: "date-time",
+              nullable: true,
+              example: "2026-02-22T14:12:00Z",
+            },
+            dateUpdated: {
+              type: "string",
+              format: "date-time",
+              nullable: true,
+              example: "2026-02-22T14:15:00Z",
+            },
+          },
+        },
+
+        Etymology: {
+          type: "object",
+          required: [
+            "givenNameId",
+            "givenName",
+            "languages",
+            "cultures",
+            "meaning",
+          ],
+          properties: {
+            givenNameId: { type: "integer", example: 123 },
+            givenName: { type: "string", example: "Arif" },
+            languages: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EtymologyLanguage" },
+            },
+            cultures: {
+              type: "array",
+              items: { $ref: "#/components/schemas/EtymologyCulture" },
+            },
+            meaning: { $ref: "#/components/schemas/EtymologyMeaning" },
+          },
+        },
       },
       responses: {
         BadRequest: {
