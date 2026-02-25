@@ -10,6 +10,7 @@ import GivenName from "../../../models/GivenName";
  * @swagger
  * /api/v1/givenName/approved:
  *   get:
+ *     operationId: v1GivenNameApproved
  *     summary: Get approved given names
  *     description: Returns the authenticated user's approved given names.
  *     tags:

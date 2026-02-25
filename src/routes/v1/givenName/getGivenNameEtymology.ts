@@ -9,6 +9,7 @@ import getEtymology from "../../../db/getEtymology";
  * @swagger
  * /api/v1/givenName/etymology/{givenCustomNameBridgeId}:
  *   get:
+ *     operationId: v1GivenNameEtymology
  *     summary: Get given name etymology
  *     description: Returns etymology information for a specific given name.
  *     tags:

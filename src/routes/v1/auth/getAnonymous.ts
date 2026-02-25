@@ -8,6 +8,7 @@ import { logger } from "../../../utils/logger";
  * @swagger
  * /api/v1/auth/anonymous:
  *   get:
+ *     operationId: v1AuthAnonymous
  *     summary: Create an anonymous user session
  *     description: Creates a new anonymous user and logs them in via session cookie.
  *     tags:

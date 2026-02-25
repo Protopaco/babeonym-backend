@@ -10,6 +10,7 @@ import User from "../../../models/User";
  * @swagger
  * /api/v1/reference/decades:
  *   get:
+ *     operationId: v1ReferenceDecades
  *     summary: Get decades
  *     description: Returns the list of available decades.
  *     tags:

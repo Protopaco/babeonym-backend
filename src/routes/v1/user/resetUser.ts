@@ -9,6 +9,7 @@ import resetUser from "../../../db/resetUser";
  * @swagger
  * /api/v1/user/me/reset:
  *   post:
+ *     operationId: v1UserReset
  *     summary: Reset user state
  *     description: Resets the authenticated user's data to an initial state.
  *     tags:

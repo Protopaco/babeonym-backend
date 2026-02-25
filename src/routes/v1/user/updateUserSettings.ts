@@ -12,6 +12,7 @@ import { parseTheme } from "../../../models/Theme";
  * @swagger
  * /api/v1/user/settings:
  *   put:
+ *     operationId: v1UserSettings
  *     summary: Update user settings
  *     description: Updates the authenticated user's settings such as theme and surname.
  *     tags:

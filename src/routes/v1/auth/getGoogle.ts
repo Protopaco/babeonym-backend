@@ -5,6 +5,7 @@ import passport from "passport";
  * @swagger
  * /api/v1/auth/google:
  *   get:
+ *     operationId: v1AuthGoogle
  *     summary: Start Google OAuth login
  *     description: Redirects the user to Google OAuth consent screen.
  *     tags:

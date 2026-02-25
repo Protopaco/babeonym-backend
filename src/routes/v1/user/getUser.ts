@@ -7,6 +7,7 @@ import User from "../../../models/User";
  * @swagger
  * /api/v1/user/me:
  *   get:
+ *     operationId: v1UserGet
  *     summary: Get current user
  *     description: Returns the currently authenticated user.
  *     tags:

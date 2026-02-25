@@ -368,6 +368,7 @@
   "paths": {
     "/api/v1/auth/anonymous": {
       "get": {
+        "operationId": "v1AuthAnonymous",
         "summary": "Create an anonymous user session",
         "description": "Creates a new anonymous user and logs them in via session cookie.",
         "tags": [
@@ -424,6 +425,7 @@
     },
     "/api/v1/auth/google": {
       "get": {
+        "operationId": "v1AuthGoogle",
         "summary": "Start Google OAuth login",
         "description": "Redirects the user to Google OAuth consent screen.",
         "tags": [
@@ -438,6 +440,7 @@
     },
     "/api/v1/auth/google/callback": {
       "get": {
+        "operationId": "v2AuthGoogleCallback",
         "summary": "Handle Google OAuth callback",
         "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
         "tags": [
@@ -470,8 +473,9 @@
         }
       }
     },
-    "api/v1/auth/microsoft": {
+    "/api/v1/auth/microsoft": {
       "get": {
+        "operationId": "v1AuthMicrosoft",
         "summary": "Start Microsoft OAuth login",
         "description": "Redirects the user to Microsoft OAuth consent screen.",
         "tags": [
@@ -486,6 +490,7 @@
     },
     "/api/v1/auth/microsoft/callback": {
       "get": {
+        "operationId": "v1AuthMicrosoftCallback",
         "summary": "Handle Microsoft OAuth callback",
         "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
         "tags": [
@@ -520,6 +525,7 @@
     },
     "/api/v1/auth/logout": {
       "post": {
+        "operationId": "v1AuthLogout",
         "summary": "Log out the current user",
         "description": "Logs out the currently authenticated user and destroys the session.\n",
         "tags": [
@@ -572,6 +578,7 @@
     },
     "/api/v1/givenName/approved": {
       "get": {
+        "operationId": "v1GivenNameApproved",
         "summary": "Get approved given names",
         "description": "Returns the authenticated user's approved given names.",
         "tags": [
@@ -606,6 +613,7 @@
     },
     "/api/v1/givenName/etymology/{givenCustomNameBridgeId}": {
       "get": {
+        "operationId": "v1GivenNameEtymology",
         "summary": "Get given name etymology",
         "description": "Returns etymology information for a specific given name.",
         "tags": [
@@ -667,6 +675,7 @@
     },
     "/api/v1/givenName/search": {
       "get": {
+        "operationId": "v1GivenNameSearch",
         "summary": "Search given names",
         "description": "Searches given names for the authenticated user using a text query.\n",
         "tags": [
@@ -741,6 +750,7 @@
     },
     "/api/v1/givenName/candidates": {
       "get": {
+        "operationId": "v1GivenNameCandidates",
         "summary": "Get given name candidates",
         "description": "Returns candidate given names for the authenticated user based on optional filters.",
         "tags": [
@@ -822,6 +832,7 @@
     },
     "/api/v1/givenName/compare": {
       "post": {
+        "operationId": "v1GivenNameCompare",
         "summary": "Compare two given names",
         "description": "Records a comparison result between two given names for the authenticated user.",
         "tags": [
@@ -905,6 +916,7 @@
     },
     "/api/v1/givenName/custom": {
       "post": {
+        "operationId": "v1GivenNameCustom",
         "summary": "Add a custom given name",
         "description": "Adds a user-defined custom given name for the authenticated user.",
         "tags": [
@@ -982,6 +994,7 @@
     },
     "/api/v1/givenName/action": {
       "post": {
+        "operationId": "v1GivenNameAction",
         "summary": "Update given name state",
         "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
         "tags": [
@@ -1070,6 +1083,7 @@
     },
     "/api/v1/health": {
       "get": {
+        "operationId": "v1Health",
         "summary": "Health check",
         "description": "Returns service health status.",
         "tags": [
@@ -1101,6 +1115,7 @@
     },
     "/api/v1/reference/cultures": {
       "get": {
+        "operationId": "v1ReferenceCultures",
         "summary": "Get cultures",
         "description": "Returns the list of available cultures.",
         "tags": [
@@ -1143,6 +1158,7 @@
     },
     "/api/v1/reference/decades": {
       "get": {
+        "operationId": "v1ReferenceDecades",
         "summary": "Get decades",
         "description": "Returns the list of available decades.",
         "tags": [
@@ -1185,6 +1201,7 @@
     },
     "/api/v1/reference/languages": {
       "get": {
+        "operationId": "v1ReferenceLanguages",
         "summary": "Get languages",
         "description": "Returns the list of available languages.",
         "tags": [
@@ -1227,6 +1244,7 @@
     },
     "/api/v1/user/me": {
       "delete": {
+        "operationId": "v1UserDelete",
         "summary": "Delete current user",
         "description": "Deletes the authenticated user account, logs them out, and destroys the session.",
         "tags": [
@@ -1268,6 +1286,7 @@
         }
       },
       "get": {
+        "operationId": "v1UserGet",
         "summary": "Get current user",
         "description": "Returns the currently authenticated user.",
         "tags": [
@@ -1307,6 +1326,7 @@
     },
     "/api/v1/user/actionHistory": {
       "get": {
+        "operationId": "v1UserActionHistory",
         "summary": "Get user action history",
         "description": "Returns the authenticated user's given-name action history.",
         "tags": [
@@ -1368,6 +1388,7 @@
     },
     "/api/v1/user/me/reset": {
       "post": {
+        "operationId": "v1UserReset",
         "summary": "Reset user state",
         "description": "Resets the authenticated user's data to an initial state.",
         "tags": [
@@ -1408,6 +1429,7 @@
     },
     "/api/v1/user/settings": {
       "put": {
+        "operationId": "v1UserSettings",
         "summary": "Update user settings",
         "description": "Updates the authenticated user's settings such as theme and surname.",
         "tags": [

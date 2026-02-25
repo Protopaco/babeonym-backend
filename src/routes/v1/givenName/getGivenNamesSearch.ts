@@ -10,6 +10,7 @@ import GivenName from "../../../models/GivenName.js";
  * @swagger
  * /api/v1/givenName/search:
  *   get:
+ *     operationId: v1GivenNameSearch
  *     summary: Search given names
  *     description: >
  *       Searches given names for the authenticated user using a text query.

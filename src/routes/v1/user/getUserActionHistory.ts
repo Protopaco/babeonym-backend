@@ -10,6 +10,7 @@ import UserActionHistory from "../../../models/UserActionHistory.js";
  * @swagger
  * /api/v1/user/actionHistory:
  *   get:
+ *     operationId: v1UserActionHistory
  *     summary: Get user action history
  *     description: Returns the authenticated user's given-name action history.
  *     tags:

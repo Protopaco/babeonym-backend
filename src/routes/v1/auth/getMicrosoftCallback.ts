@@ -15,6 +15,7 @@ const frontEndBaseUrl =
  * @swagger
  * /api/v1/auth/microsoft/callback:
  *   get:
+ *     operationId: v1AuthMicrosoftCallback
  *     summary: Handle Microsoft OAuth callback
  *     description: >
  *       Handles the Microsoft OAuth callback, links or logs in a user as needed,

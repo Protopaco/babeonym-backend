@@ -7,6 +7,7 @@ import getHealth from "../../../db/getHealth.js";
  * @swagger
  * /api/v1/health:
  *   get:
+ *     operationId: v1Health
  *     summary: Health check
  *     description: Returns service health status.
  *     tags:

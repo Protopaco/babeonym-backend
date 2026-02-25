@@ -9,6 +9,7 @@ import User from "../../../models/User.js";
  * @swagger
  * /api/v1/givenName/compare:
  *   post:
+ *     operationId: v1GivenNameCompare
  *     summary: Compare two given names
  *     description: Records a comparison result between two given names for the authenticated user.
  *     tags:

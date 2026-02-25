@@ -7,6 +7,7 @@ const router = Router();
  * @swagger
  * /api/v1/auth/logout:
  *   post:
+ *     operationId: v1AuthLogout
  *     summary: Log out the current user
  *     description: >
  *       Logs out the currently authenticated user and destroys the session.

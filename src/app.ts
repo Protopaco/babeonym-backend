@@ -49,7 +49,7 @@ app.use(
     customCssUrl: "/swagger-dark.css",
   }),
 );
-app.get("/openapion", (req, res) => {
+app.get("/openapi.json", (req, res) => {
   res.json(swaggerSpec);
 });
 app.use(express.json());
@@ -201,7 +201,7 @@ passport.deserializeUser(async (userId: number, done) => {
 });
 
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
 
 const server = app.listen(PORT, HOST, () => {
   logger.info(`API server running at http://${HOST}:${PORT}`);

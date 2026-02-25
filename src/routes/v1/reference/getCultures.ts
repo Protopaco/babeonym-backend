@@ -1,15 +1,16 @@
 import { Router, Request, Response } from "express";
 const router = Router();
-import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
+import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import { logger } from "../../../utils/logger";
 import getCultures from "../../../db/getCultures";
-import Culture from "../../../models/Culture";
+import Cultures from "../../../models/Cultures";
 import User from "../../../models/User";
 
 /**
  * @swagger
  * /api/v1/reference/cultures:
  *   get:
+ *     operationId: v1ReferenceCultures
  *     summary: Get cultures
  *     description: Returns the list of available cultures.
  *     tags:
@@ -41,7 +42,7 @@ router.get(
   async (req: Request, res: Response) => {
     const userId = (req.user as User).id;
     logger.info("Received request for cultures from user ID: " + userId);
-    const cultures: Culture[] = await getCultures();
+    const cultures: Cultures = await getCultures();
     res.status(200).json({ cultures });
   },
 );

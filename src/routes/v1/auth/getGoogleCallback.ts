@@ -15,6 +15,7 @@ const frontEndBaseUrl =
  * @swagger
  * /api/v1/auth/google/callback:
  *   get:
+ *     operationId: v2AuthGoogleCallback
  *     summary: Handle Google OAuth callback
  *     description: >
  *       Handles the Google OAuth callback, links or logs in a user as needed,

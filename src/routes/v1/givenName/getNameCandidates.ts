@@ -12,6 +12,7 @@ import GivenName from "../../../models/GivenName.js";
  * @swagger
  * /api/v1/givenName/candidates:
  *   get:
+ *     operationId: v1GivenNameCandidates
  *     summary: Get given name candidates
  *     description: Returns candidate given names for the authenticated user based on optional filters.
  *     tags:

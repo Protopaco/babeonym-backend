@@ -9,6 +9,7 @@ import User from "../../../models/User";
  * @swagger
  * /api/v1/user/me:
  *   delete:
+ *     operationId: v1UserDelete
  *     summary: Delete current user
  *     description: Deletes the authenticated user account, logs them out, and destroys the session.
  *     tags:

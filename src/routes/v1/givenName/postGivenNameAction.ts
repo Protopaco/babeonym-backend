@@ -10,6 +10,7 @@ import User from "../../../models/User";
  * @swagger
  * /api/v1/givenName/action:
  *   post:
+ *     operationId: v1GivenNameAction
  *     summary: Update given name state
  *     description: Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.
  *     tags:
