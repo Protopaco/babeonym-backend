@@ -1,0 +1,33 @@
+const givenNameSchemas = {
+  GivenName: {
+    type: "object",
+    required: ["givenName", "givenCustomNameBridgeId", "rating"],
+    properties: {
+      givenName: {
+        type: "string",
+        example: "Oliver",
+      },
+      givenCustomNameBridgeId: {
+        type: "number",
+        example: 42,
+      },
+      rating: {
+        type: "number",
+        example: 1000,
+      },
+      percentile: {
+        type: "number",
+        nullable: true,
+        example: 92,
+      },
+      gender: {
+        type: "string",
+        nullable: true,
+        description: "Key of Gender enum",
+        example: "male",
+      },
+    },
+  },
+};
+
+export default givenNameSchemas;

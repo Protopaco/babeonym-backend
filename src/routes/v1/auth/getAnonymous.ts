@@ -19,25 +19,13 @@ import { logger } from "../../../utils/logger";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [message, user]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Anonymous session created
- *                 user:
- *                   $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/V1AuthAnonymous200Response'
  *       400:
  *         description: User is already authenticated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: User is already authenticated
+ *               $ref: '#/components/schemas/V1AuthAnonymous400Response'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */

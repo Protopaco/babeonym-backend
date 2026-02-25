@@ -9,35 +9,14 @@ const router = Router();
  *   post:
  *     operationId: v1AuthLogout
  *     summary: Log out the current user
- *     description: >
- *       Logs out the currently authenticated user and destroys the session.
- *     tags:
- *       - Auth
+ *     tags: [Auth]
  *     responses:
  *       204:
  *         description: Logout successful
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Not authenticated
+ *         $ref: '#/components/responses/NotAuthenticated'
  *       500:
- *         description: Logout failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Logout failed
+ *         $ref: '#/components/responses/InternalServerError'
  */
 
 router.post("/logout", ensureAuthenticated, (req: Request, res: Response) => {

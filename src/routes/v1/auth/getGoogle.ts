@@ -1,6 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import passport from "passport";
+
 /**
  * @swagger
  * /api/v1/auth/google:
@@ -8,11 +9,15 @@ import passport from "passport";
  *     operationId: v1AuthGoogle
  *     summary: Start Google OAuth login
  *     description: Redirects the user to Google OAuth consent screen.
- *     tags:
- *       - Auth
+ *     tags: [Auth]
  *     responses:
  *       302:
  *         description: Redirect to Google OAuth provider
+ *         headers:
+ *           Location:
+ *             description: Redirect URL
+ *             schema:
+ *               type: string
  */
 
 router.get(
