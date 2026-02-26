@@ -30,7 +30,7 @@ const frontEndBaseUrl =
  *           type: string
  *         description: OAuth authorization code returned by Microsoft
  *       - in: query
- *         name: error
+ *         name: autherror
  *         required: false
  *         schema:
  *           type: string

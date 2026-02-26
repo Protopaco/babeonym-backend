@@ -10,11 +10,6 @@
       "description": "Development server"
     }
   ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "components": {
     "schemas": {
       "V1GivenNameActionRequest": {
@@ -736,7 +731,7 @@
           },
           {
             "in": "query",
-            "name": "error",
+            "name": "authError",
             "required": false,
             "schema": {
               "type": "string"
@@ -786,7 +781,7 @@
           },
           {
             "in": "query",
-            "name": "error",
+            "name": "autherror",
             "required": false,
             "schema": {
               "type": "string"

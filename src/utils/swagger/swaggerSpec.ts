@@ -20,7 +20,6 @@ const swaggerOptions = {
         description: "Development server",
       },
     ],
-    security: [{ bearerAuth: [] }],
     components: {
       schemas,
       responses,

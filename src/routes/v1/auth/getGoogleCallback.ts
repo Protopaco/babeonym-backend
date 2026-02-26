@@ -30,7 +30,7 @@ const frontEndBaseUrl =
  *           type: string
  *         description: OAuth authorization code returned by Google
  *       - in: query
- *         name: error
+ *         name: authError
  *         required: false
  *         schema:
  *           type: string
