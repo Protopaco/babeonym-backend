@@ -38,11 +38,19 @@ const languageSchemas = {
       },
     },
   },
-
   Languages: {
     type: "array",
     items: {
       $ref: "#/components/schemas/LanguageWithRegions",
+    },
+  },
+  ReferenceLanguagesResponse: {
+    type: "object",
+    required: ["languages"],
+    properties: {
+      languages: {
+        $ref: "#/components/schemas/Languages",
+      },
     },
   },
 } as const;

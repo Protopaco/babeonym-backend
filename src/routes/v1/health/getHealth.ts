@@ -18,13 +18,13 @@ import getHealth from "../../../db/getHealth.js";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/HealthStatus'
  *       503:
  *         description: Service is unhealthy
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/HealthStatus'
  */
 
 router.get("/", async (req, res) => {

@@ -21,19 +21,9 @@ import User from "../../../models/User.js";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [languages]
- *               properties:
- *                 languages:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Language'
+ *               $ref: '#/components/schemas/ReferenceLanguagesResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(

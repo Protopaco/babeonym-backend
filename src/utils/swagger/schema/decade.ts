@@ -17,6 +17,16 @@ const decadeSchema = {
       },
     },
   },
-};
+  ReferenceDecadesResponse: {
+    type: "object",
+    required: ["decades"],
+    properties: {
+      decades: {
+        type: "array",
+        items: { $ref: "#/components/schemas/Decade" },
+      },
+    },
+  },
+} as const;
 
 export default decadeSchema;

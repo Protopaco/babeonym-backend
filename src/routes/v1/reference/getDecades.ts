@@ -21,19 +21,9 @@ import User from "../../../models/User";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [decades]
- *               properties:
- *                 decades:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Decade'
+ *               $ref: '#/components/schemas/ReferenceDecadesResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(

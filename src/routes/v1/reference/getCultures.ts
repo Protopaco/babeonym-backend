@@ -21,19 +21,9 @@ import User from "../../../models/User";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [cultures]
- *               properties:
- *                 cultures:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Culture'
+ *               $ref: '#/components/schemas/ReferenceCulturesResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(
