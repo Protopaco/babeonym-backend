@@ -20,45 +20,22 @@ import User from "../../../models/User";
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [givenCustomNameBridgeId, newState]
- *             properties:
- *               givenCustomNameBridgeId:
- *                 type: number
- *                 example: 123
- *               newState:
- *                 type: string
- *                 enum: [APPROVED, REJECTED, SNOOZED]
- *                 example: APPROVED
+ *             $ref: '#/components/schemas/V1GivenNameActionRequest'
  *     responses:
  *       200:
  *         description: Given name action updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Given name action updated successfully
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
  *         description: Invalid request parameters
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Invalid request parameters
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.post(
@@ -76,7 +53,7 @@ router.post(
         newState !== NameState.REJECTED &&
         newState !== NameState.SNOOZED)
     ) {
-      return res.status(400).json({ error: "Invalid request parameters" });
+      return res.status(400).json({ message: "Invalid request parameters" });
     }
 
     await updateGivenNameAction(userId, givenCustomNameBridgeId, newState);

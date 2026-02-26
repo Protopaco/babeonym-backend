@@ -58,11 +58,7 @@ import GivenName from "../../../models/GivenName.js";
  *               items:
  *                 $ref: '#/components/schemas/GivenName'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(

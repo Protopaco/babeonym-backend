@@ -20,40 +20,22 @@ import isBadWord from "../../../utils/isBadWord.js";
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [customGivenName]
- *             properties:
- *               customGivenName:
- *                 type: string
- *                 example: "Aurelius"
+ *             $ref: '#/components/schemas/V1GivenNameCustomRequest'
  *     responses:
  *       200:
  *         description: Custom given name added successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Custom given name added successfully
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
  *         description: Invalid or inappropriate custom given name
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.post(

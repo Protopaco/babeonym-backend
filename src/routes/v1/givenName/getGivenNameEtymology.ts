@@ -29,16 +29,11 @@ import getEtymology from "../../../db/getEtymology";
  *             schema:
  *               $ref: '#/components/schemas/Etymology'
  *       400:
- *         description: Invalid givenCustomNameBridgeId
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Invalid givenCustomNameBridgeId
+ *        description: Invalid givenCustomNameBridgeId
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Not authenticated
  *         content:
@@ -53,7 +48,9 @@ router.get(
   async (req: Request, res: Response) => {
     const givenCustomNameBridgeId = Number(req.params.givenCustomNameBridgeId);
     if (Number.isNaN(givenCustomNameBridgeId)) {
-      return res.status(400).json({ error: "Invalid givenCustomNameBridgeId" });
+      return res
+        .status(400)
+        .json({ message: "Invalid givenCustomNameBridgeId" });
     }
     logger.info(`Given name etymology request. Id: ${givenCustomNameBridgeId}`);
 

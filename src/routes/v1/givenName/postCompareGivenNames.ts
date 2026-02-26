@@ -19,44 +19,22 @@ import User from "../../../models/User.js";
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [winnerId, loserId]
- *             properties:
- *               winnerId:
- *                 type: number
- *                 example: 12
- *               loserId:
- *                 type: number
- *                 example: 34
+ *             $ref: '#/components/schemas/V1GivenNameCompareRequest'
  *     responses:
  *       200:
  *         description: Comparison recorded successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Given name comparison updated successfully
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
  *         description: Invalid winnerId or loserId
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Invalid winnerId or loserId
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.post(
@@ -71,7 +49,7 @@ router.post(
       winnerId <= 0 ||
       loserId <= 0
     ) {
-      return res.status(400).json({ error: "Invalid winnerId or loserId" });
+      return res.status(400).json({ message: "Invalid winnerId or loserId" });
     }
     logger.info(
       `User ${userId} compared given names: winnerId=${winnerId}, loserId=${loserId}`,

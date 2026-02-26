@@ -24,12 +24,8 @@ import GivenName from "../../../models/GivenName";
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/GivenName'
- *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *        401:
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(

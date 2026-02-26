@@ -44,18 +44,9 @@ import GivenName from "../../../models/GivenName.js";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Query parameter 'search' is required
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(
@@ -67,7 +58,7 @@ router.get(
     const limit = parseInt((req.query.limit as string) || "10", 10);
 
     if (!searchText) {
-      res.status(400).json({ error: "Query parameter 'search' is required" });
+      res.status(400).json({ message: "Query parameter 'search' is required" });
       return;
     }
 
