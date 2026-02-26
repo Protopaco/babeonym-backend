@@ -35,11 +35,7 @@ import getEtymology from "../../../db/getEtymology";
  *            schema:
  *              $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get(

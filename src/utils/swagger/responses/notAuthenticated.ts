@@ -1,5 +1,5 @@
 const notAuthenticatedResponse = {
-  NotAuthenticatedResponse: {
+  NotAuthenticated: {
     description: "Not authenticated",
     content: {
       "application/json": {

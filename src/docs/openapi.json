@@ -645,7 +645,7 @@
           }
         }
       },
-      "NotAuthenticatedResponse": {
+      "NotAuthenticated": {
         "description": "Not authenticated",
         "content": {
           "application/json": {
@@ -890,14 +890,7 @@
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
