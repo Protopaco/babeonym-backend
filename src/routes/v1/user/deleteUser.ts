@@ -18,22 +18,9 @@ import User from "../../../models/User";
  *       204:
  *         description: User deleted and session terminated
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  *       500:
- *         description: Logout failed
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Logout failed
+ *         $ref: '#/components/responses/InternalServerError'
  */
 
 router.delete(
@@ -47,7 +34,7 @@ router.delete(
     req.logout(function (err) {
       if (err) {
         logger.error(err);
-        return res.status(500).end();
+        return res.status(500).json({ message: "Logout failed" });
       }
       req.session?.destroy(() => {
         logger.info(req.user, "User logged out successfully");

@@ -20,18 +20,9 @@ import resetUser from "../../../db/resetUser";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [message]
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User reset successfully
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.post(

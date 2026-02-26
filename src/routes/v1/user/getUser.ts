@@ -3,6 +3,7 @@ const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import { logger } from "../../../utils/logger";
 import User from "../../../models/User";
+
 /**
  * @swagger
  * /api/v1/user/me:
@@ -18,17 +19,9 @@ import User from "../../../models/User";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [user]
- *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/UserMeResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  */
 
 router.get("/me", ensureAuthenticated, async (req: Request, res: Response) => {

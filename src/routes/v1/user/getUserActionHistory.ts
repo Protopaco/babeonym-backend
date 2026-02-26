@@ -21,30 +21,15 @@ import UserActionHistory from "../../../models/UserActionHistory.js";
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [actionHistory]
- *               properties:
- *                 actionHistory:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/UserActionHistory'
+ *               $ref: '#/components/schemas/UserActionHistoryResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  *       404:
  *         description: User not found in request
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: User not found
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 router.get(
@@ -55,7 +40,7 @@ router.get(
     logger.info(`Fetching action history for user ID: ${userId}`);
     if (!req.user) {
       logger.warn("User not found in request object");
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     const actionHistory: UserActionHistory[] =
       await getUserActionHistory(userId);

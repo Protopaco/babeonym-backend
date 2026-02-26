@@ -22,53 +22,28 @@ import { parseTheme } from "../../../models/Theme";
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [theme, surName]
- *             properties:
- *               theme:
- *                 type: string
- *                 description: Theme identifier
- *               surName:
- *                 type: string
- *                 description: User surname
+ *             $ref: '#/components/schemas/V1UserSettingsRequest'
  *     responses:
  *       200:
  *         description: User settings updated
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [settings]
- *               properties:
- *                 settings:
- *                   $ref: '#/components/schemas/UserSettings'
+ *               $ref: '#/components/schemas/UserSettingsResponse'
  *       400:
  *         description: Invalid input (missing fields, invalid theme, or inappropriate language)
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: Not authenticated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotAuthenticatedResponse'
+ *         $ref: '#/components/responses/NotAuthenticated'
  *       500:
  *         description: Failed to update user settings
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [error]
- *               properties:
- *                 error:
- *                   type: string
- *                   example: An error occurred while updating settings
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 
 router.put(
@@ -88,12 +63,12 @@ router.put(
       );
       return res
         .status(400)
-        .send({ error: "Missing theme or surName in request body" });
+        .send({ message: "Missing theme or surName in request body" });
     }
     const theme = parseTheme(rawTheme);
     if (theme === null) {
       logger.warn(`Invalid theme value: ${rawTheme} for user ID: ${userId}`);
-      return res.status(400).send({ error: "Invalid theme value" });
+      return res.status(400).send({ message: "Invalid theme value" });
     }
 
     const surNameNaughty = isBadWord(surName);
@@ -103,7 +78,7 @@ router.put(
       );
       return res
         .status(400)
-        .send({ error: "surName contains inappropriate language" });
+        .send({ message: "surName contains inappropriate language" });
     }
 
     try {
@@ -118,7 +93,7 @@ router.put(
       logger.error(`Error updating settings for user ID: ${userId}: ${error}`);
       res
         .status(500)
-        .send({ error: "An error occurred while updating settings" });
+        .send({ message: "An error occurred while updating settings" });
     }
   },
 );

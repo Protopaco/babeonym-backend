@@ -31,6 +31,25 @@ const userSchemas = {
       },
     },
   },
+  UserMeResponse: {
+    type: "object",
+    required: ["user"],
+    properties: {
+      user: {
+        $ref: "#/components/schemas/User",
+      },
+    },
+  },
+  UserActionHistoryResponse: {
+    type: "object",
+    required: ["actionHistory"],
+    properties: {
+      actionHistory: {
+        type: "array",
+        items: { $ref: "#/components/schemas/UserActionHistory" },
+      },
+    },
+  },
 };
 
 export default userSchemas;

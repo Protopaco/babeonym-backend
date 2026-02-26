@@ -9,6 +9,7 @@ import etymologySchemas from "./etymology";
 import givenNameSchemas from "./givenName";
 import healthSchemas from "./health";
 import languageSchemas from "./language";
+import settingsSchemas from "./settings";
 import userSchemas from "./user";
 import userActionHistorySchemas from "./userActionHistory";
 import userSettingsSchemas from "./userSettings";
@@ -25,6 +26,7 @@ const schemas = {
   ...givenNameSchemas,
   ...healthSchemas,
   ...languageSchemas,
+  ...settingsSchemas,
   ...userSchemas,
   ...userActionHistorySchemas,
   ...userSettingsSchemas,
