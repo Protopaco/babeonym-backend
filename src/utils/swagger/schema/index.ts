@@ -4,7 +4,7 @@ import compareSchemas from "./compare";
 import cultureSchemas from "./cultures";
 import customSchemas from "./custom";
 import decadeSchemas from "./decade";
-import errorSchemas from "./error";
+import errorSchemas from "./errorSchemas";
 import etymologySchemas from "./etymology";
 import givenNameSchemas from "./givenName";
 import healthSchemas from "./health";

@@ -143,12 +143,6 @@
           }
         }
       },
-      "Cultures": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/CultureWithRegions"
-        }
-      },
       "ReferenceCulturesResponse": {
         "type": "object",
         "required": [
@@ -156,7 +150,10 @@
         ],
         "properties": {
           "cultures": {
-            "$ref": "#/components/schemas/Cultures"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CultureWithRegions"
+            }
           }
         }
       },
@@ -440,12 +437,6 @@
           }
         }
       },
-      "Languages": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/LanguageWithRegions"
-        }
-      },
       "ReferenceLanguagesResponse": {
         "type": "object",
         "required": [
@@ -453,7 +444,10 @@
         ],
         "properties": {
           "languages": {
-            "$ref": "#/components/schemas/Languages"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguageWithRegions"
+            }
           }
         }
       },

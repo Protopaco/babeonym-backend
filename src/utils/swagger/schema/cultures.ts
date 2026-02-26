@@ -37,18 +37,13 @@ const cultureSchemas = {
       },
     },
   },
-  Cultures: {
-    type: "array",
-    items: {
-      $ref: "#/components/schemas/CultureWithRegions",
-    },
-  },
   ReferenceCulturesResponse: {
     type: "object",
     required: ["cultures"],
     properties: {
       cultures: {
-        $ref: "#/components/schemas/Cultures",
+        type: "array",
+        items: { $ref: "#/components/schemas/CultureWithRegions" },
       },
     },
   },
