@@ -17,6 +17,197 @@
   ],
   "components": {
     "schemas": {
+      "V1GivenNameActionRequest": {
+        "type": "object",
+        "required": [
+          "givenCustomNameBridgeId",
+          "newState"
+        ],
+        "properties": {
+          "givenCustomNameBridgeId": {
+            "type": "integer",
+            "example": 123
+          },
+          "newState": {
+            "type": "string",
+            "enum": [
+              "APPROVED",
+              "REJECTED",
+              "SNOOZED"
+            ],
+            "example": "APPROVED"
+          }
+        }
+      },
+      "V1AuthAnonymous200Response": {
+        "type": "object",
+        "required": [
+          "message",
+          "user"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Anonymous session created"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "V1AuthAnonymous400Response": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "User is already authenticated"
+          }
+        }
+      },
+      "V1GivenNameCompareRequest": {
+        "type": "object",
+        "required": [
+          "winnerId",
+          "loserId"
+        ],
+        "properties": {
+          "winnerId": {
+            "type": "integer",
+            "example": 12
+          },
+          "loserId": {
+            "type": "integer",
+            "example": 34
+          }
+        }
+      },
+      "CultureRegionCulture": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "CultureRegion": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "cultures"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "cultures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CultureRegionCulture"
+            }
+          }
+        }
+      },
+      "CultureWithRegions": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "regions"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CultureRegion"
+            }
+          }
+        }
+      },
+      "Cultures": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CultureWithRegions"
+        }
+      },
+      "ReferenceCulturesResponse": {
+        "type": "object",
+        "required": [
+          "cultures"
+        ],
+        "properties": {
+          "cultures": {
+            "$ref": "#/components/schemas/Cultures"
+          }
+        }
+      },
+      "V1GivenNameCustomRequest": {
+        "type": "object",
+        "required": [
+          "customGivenName"
+        ],
+        "properties": {
+          "customGivenName": {
+            "type": "string",
+            "example": "Aurelius"
+          }
+        }
+      },
+      "Decade": {
+        "type": "object",
+        "required": [
+          "id",
+          "decade",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "decade": {
+            "type": "number",
+            "example": 1990
+          },
+          "label": {
+            "type": "string",
+            "example": "1990s"
+          }
+        }
+      },
+      "ReferenceDecadesResponse": {
+        "type": "object",
+        "required": [
+          "decades"
+        ],
+        "properties": {
+          "decades": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Decade"
+            }
+          }
+        }
+      },
       "ErrorResponse": {
         "type": "object",
         "required": [
@@ -31,6 +222,287 @@
               "server_error"
             ]
           },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "EtymologyLanguage": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "flag"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "flag": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "EtymologyCulture": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "EtymologyMeaning": {
+        "type": "object",
+        "required": [
+          "short",
+          "long",
+          "dateCreated",
+          "dateUpdated"
+        ],
+        "properties": {
+          "short": {
+            "type": "string",
+            "nullable": true
+          },
+          "long": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Etymology": {
+        "type": "object",
+        "required": [
+          "givenCustomNameBridgeId",
+          "givenName",
+          "languages",
+          "cultures",
+          "meaning"
+        ],
+        "properties": {
+          "givenCustomNameBridgeId": {
+            "type": "integer"
+          },
+          "givenName": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtymologyLanguage"
+            }
+          },
+          "cultures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtymologyCulture"
+            }
+          },
+          "meaning": {
+            "$ref": "#/components/schemas/EtymologyMeaning"
+          }
+        }
+      },
+      "GivenName": {
+        "type": "object",
+        "required": [
+          "givenName",
+          "givenCustomNameBridgeId",
+          "rating"
+        ],
+        "properties": {
+          "givenName": {
+            "type": "string",
+            "example": "Oliver"
+          },
+          "givenCustomNameBridgeId": {
+            "type": "number",
+            "example": 42
+          },
+          "rating": {
+            "type": "number",
+            "example": 1000
+          },
+          "percentile": {
+            "type": "number",
+            "nullable": true,
+            "example": 92
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true,
+            "description": "Key of Gender enum",
+            "example": "male"
+          }
+        }
+      },
+      "HealthStatus": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "LanguageRegionLanguage": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "flag"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "flag": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "LanguageRegion": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "languages"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguageRegionLanguage"
+            }
+          }
+        }
+      },
+      "LanguageWithRegions": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "regions"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguageRegion"
+            }
+          }
+        }
+      },
+      "Languages": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LanguageWithRegions"
+        }
+      },
+      "ReferenceLanguagesResponse": {
+        "type": "object",
+        "required": [
+          "languages"
+        ],
+        "properties": {
+          "languages": {
+            "$ref": "#/components/schemas/Languages"
+          }
+        }
+      },
+      "NotAuthenticatedResponse": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Not authenticated"
+          }
+        }
+      },
+      "V1UserSettingsRequest": {
+        "type": "object",
+        "required": [
+          "theme",
+          "surName"
+        ],
+        "properties": {
+          "theme": {
+            "type": "string",
+            "description": "Theme identifier"
+          },
+          "surName": {
+            "type": "string",
+            "description": "User surname"
+          }
+        }
+      },
+      "UserSettingsResponse": {
+        "type": "object",
+        "required": [
+          "settings"
+        ],
+        "properties": {
+          "settings": {
+            "$ref": "#/components/schemas/UserSettings"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
           "message": {
             "type": "string"
           }
@@ -70,104 +542,28 @@
           }
         }
       },
-      "GivenName": {
+      "UserMeResponse": {
         "type": "object",
         "required": [
-          "givenName",
-          "givenCustomNameBridgeId",
-          "rating"
+          "user"
         ],
         "properties": {
-          "givenName": {
-            "type": "string",
-            "example": "Oliver"
-          },
-          "givenCustomNameBridgeId": {
-            "type": "number",
-            "example": 42
-          },
-          "rating": {
-            "type": "number",
-            "example": 1000
-          },
-          "percentile": {
-            "type": "number",
-            "nullable": true,
-            "example": 92
-          },
-          "gender": {
-            "type": "string",
-            "nullable": true,
-            "description": "Key of Gender enum",
-            "example": "male"
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         }
       },
-      "NotAuthenticatedResponse": {
+      "UserActionHistoryResponse": {
         "type": "object",
         "required": [
-          "message"
+          "actionHistory"
         ],
         "properties": {
-          "message": {
-            "type": "string",
-            "example": "Not authenticated"
-          }
-        }
-      },
-      "Decade": {
-        "type": "object",
-        "required": [
-          "id",
-          "decade",
-          "label"
-        ],
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "decade": {
-            "type": "number",
-            "example": 1990
-          },
-          "label": {
-            "type": "string",
-            "example": "1990s"
-          }
-        }
-      },
-      "Language": {
-        "type": "object",
-        "required": [
-          "id",
-          "label"
-        ],
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "label": {
-            "type": "string",
-            "example": "French"
-          }
-        }
-      },
-      "Culture": {
-        "type": "object",
-        "required": [
-          "id",
-          "label"
-        ],
-        "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
-          "label": {
-            "type": "string",
-            "example": "Amish"
+          "actionHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserActionHistory"
+            }
           }
         }
       },
@@ -222,114 +618,6 @@
             "example": "Stevens"
           }
         }
-      },
-      "EtymologyLanguage": {
-        "type": "object",
-        "required": [
-          "id",
-          "label",
-          "flag"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 4
-          },
-          "label": {
-            "type": "string",
-            "example": "Arabic"
-          },
-          "flag": {
-            "type": "string",
-            "nullable": true,
-            "example": "🇸🇦"
-          }
-        }
-      },
-      "EtymologyCulture": {
-        "type": "object",
-        "required": [
-          "id",
-          "label"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 26
-          },
-          "label": {
-            "type": "string",
-            "example": "Persian"
-          }
-        }
-      },
-      "EtymologyMeaning": {
-        "type": "object",
-        "required": [
-          "short",
-          "long",
-          "dateCreated",
-          "dateUpdated"
-        ],
-        "properties": {
-          "short": {
-            "type": "string",
-            "nullable": true,
-            "example": "knowledgeable, wise"
-          },
-          "long": {
-            "type": "string",
-            "nullable": true,
-            "example": "Derived from Arabic meaning one who knows or is aware."
-          },
-          "dateCreated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "example": "2026-02-22T14:12:00Z"
-          },
-          "dateUpdated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "example": "2026-02-22T14:15:00Z"
-          }
-        }
-      },
-      "Etymology": {
-        "type": "object",
-        "required": [
-          "givenNameId",
-          "givenName",
-          "languages",
-          "cultures",
-          "meaning"
-        ],
-        "properties": {
-          "givenNameId": {
-            "type": "integer",
-            "example": 123
-          },
-          "givenName": {
-            "type": "string",
-            "example": "Arif"
-          },
-          "languages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EtymologyLanguage"
-            }
-          },
-          "cultures": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EtymologyCulture"
-            }
-          },
-          "meaning": {
-            "$ref": "#/components/schemas/EtymologyMeaning"
-          }
-        }
       }
     },
     "responses": {
@@ -362,6 +650,16 @@
             }
           }
         }
+      },
+      "NotAuthenticatedResponse": {
+        "description": "Not authenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotAuthenticatedResponse"
+            }
+          }
+        }
       }
     }
   },
@@ -380,20 +678,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message",
-                    "user"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Anonymous session created"
-                    },
-                    "user": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/V1AuthAnonymous200Response"
                 }
               }
             }
@@ -403,16 +688,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "User is already authenticated"
-                    }
-                  }
+                  "$ref": "#/components/schemas/V1AuthAnonymous400Response"
                 }
               }
             }
@@ -433,7 +709,15 @@
         ],
         "responses": {
           "302": {
-            "description": "Redirect to Google OAuth provider"
+            "description": "Redirect to Google OAuth provider",
+            "headers": {
+              "Location": {
+                "description": "Redirect URL",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -527,7 +811,6 @@
       "post": {
         "operationId": "v1AuthLogout",
         "summary": "Log out the current user",
-        "description": "Logs out the currently authenticated user and destroys the session.\n",
         "tags": [
           "Auth"
         ],
@@ -536,42 +819,10 @@
             "description": "Logout successful"
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Not authenticated"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           },
           "500": {
-            "description": "Logout failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Logout failed"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -599,14 +850,7 @@
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -646,16 +890,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Invalid givenCustomNameBridgeId"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -721,29 +956,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Query parameter 'search' is required"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -818,14 +1037,7 @@
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -843,21 +1055,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "winnerId",
-                  "loserId"
-                ],
-                "properties": {
-                  "winnerId": {
-                    "type": "number",
-                    "example": 12
-                  },
-                  "loserId": {
-                    "type": "number",
-                    "example": 34
-                  }
-                }
+                "$ref": "#/components/schemas/V1GivenNameCompareRequest"
               }
             }
           }
@@ -868,16 +1066,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Given name comparison updated successfully"
-                    }
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
@@ -887,29 +1076,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Invalid winnerId or loserId"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -927,16 +1100,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "customGivenName"
-                ],
-                "properties": {
-                  "customGivenName": {
-                    "type": "string",
-                    "example": "Aurelius"
-                  }
-                }
+                "$ref": "#/components/schemas/V1GivenNameCustomRequest"
               }
             }
           }
@@ -947,16 +1111,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Custom given name added successfully"
-                    }
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
@@ -966,28 +1121,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1005,26 +1145,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "givenCustomNameBridgeId",
-                  "newState"
-                ],
-                "properties": {
-                  "givenCustomNameBridgeId": {
-                    "type": "number",
-                    "example": 123
-                  },
-                  "newState": {
-                    "type": "string",
-                    "enum": [
-                      "APPROVED",
-                      "REJECTED",
-                      "SNOOZED"
-                    ],
-                    "example": "APPROVED"
-                  }
-                }
+                "$ref": "#/components/schemas/V1GivenNameActionRequest"
               }
             }
           }
@@ -1035,16 +1156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Given name action updated successfully"
-                    }
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
@@ -1054,29 +1166,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Invalid request parameters"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1095,7 +1191,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/HealthStatus"
                 }
               }
             }
@@ -1105,7 +1201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/HealthStatus"
                 }
               }
             }
@@ -1127,31 +1223,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "cultures"
-                  ],
-                  "properties": {
-                    "cultures": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Culture"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ReferenceCulturesResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1170,31 +1248,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "decades"
-                  ],
-                  "properties": {
-                    "decades": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Decade"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ReferenceDecadesResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1213,31 +1273,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "languages"
-                  ],
-                  "properties": {
-                    "languages": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Language"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/ReferenceLanguagesResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1255,33 +1297,10 @@
             "description": "User deleted and session terminated"
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           },
           "500": {
-            "description": "Logout failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Logout failed"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -1298,28 +1317,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "user"
-                  ],
-                  "properties": {
-                    "user": {
-                      "$ref": "#/components/schemas/User"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserMeResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1338,47 +1342,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "actionHistory"
-                  ],
-                  "properties": {
-                    "actionHistory": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/UserActionHistory"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserActionHistoryResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           },
           "404": {
             "description": "User not found in request",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "User not found"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1400,29 +1377,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User reset successfully"
-                    }
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }
@@ -1440,21 +1401,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "theme",
-                  "surName"
-                ],
-                "properties": {
-                  "theme": {
-                    "type": "string",
-                    "description": "Theme identifier"
-                  },
-                  "surName": {
-                    "type": "string",
-                    "description": "User surname"
-                  }
-                }
+                "$ref": "#/components/schemas/V1UserSettingsRequest"
               }
             }
           }
@@ -1465,15 +1412,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "settings"
-                  ],
-                  "properties": {
-                    "settings": {
-                      "$ref": "#/components/schemas/UserSettings"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserSettingsResponse"
                 }
               }
             }
@@ -1483,44 +1422,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotAuthenticatedResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/NotAuthenticated"
           },
           "500": {
             "description": "Failed to update user settings",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "An error occurred while updating settings"
-                    }
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }

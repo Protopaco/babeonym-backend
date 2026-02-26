@@ -24,7 +24,7 @@ import GivenName from "../../../models/GivenName";
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/GivenName'
- *        401:
+ *       401:
  *         $ref: '#/components/responses/NotAuthenticated'
  */
 

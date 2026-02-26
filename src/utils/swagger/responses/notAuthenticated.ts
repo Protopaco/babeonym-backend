@@ -1,9 +1,10 @@
 const notAuthenticatedResponse = {
   NotAuthenticatedResponse: {
-    type: "object",
-    required: ["message"],
-    properties: {
-      message: { type: "string", example: "Not authenticated" },
+    description: "Not authenticated",
+    content: {
+      "application/json": {
+        schema: { $ref: "#/components/schemas/NotAuthenticatedResponse" },
+      },
     },
   },
 };
