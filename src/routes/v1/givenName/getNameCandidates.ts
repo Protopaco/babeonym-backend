@@ -23,31 +23,48 @@ import GivenName from "../../../models/GivenName.js";
  *         required: false
  *         schema:
  *           type: number
- *         description: Popularity filter
+ *         description: Popularity percentile target from 0.0 to 1.0.
  *       - in: query
  *         name: genders
  *         required: false
  *         schema:
  *           type: string
- *         description: Comma-separated list of genders
+ *         description: Comma-separated list of genders.
+ *         example: male,female
  *       - in: query
  *         name: decadeIds
  *         required: false
  *         schema:
  *           type: string
- *         description: Comma-separated decade IDs
+ *         description: Comma-separated list of decade IDs.
+ *         example: 1,2,3
+ *       - in: query
+ *         name: languageIds
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of language IDs.
+ *         example: 4,7
+ *       - in: query
+ *         name: cultureIds
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Comma-separated list of culture IDs.
+ *         example: 2,9
  *       - in: query
  *         name: limit
  *         required: false
  *         schema:
  *           type: integer
- *         description: Maximum number of results
+ *         description: Maximum number of results.
  *       - in: query
  *         name: include
  *         required: false
  *         schema:
  *           type: string
- *         description: Comma-separated include options (e.g. meta)
+ *         description: Comma-separated include options.
+ *         example: meta
  *     responses:
  *       200:
  *         description: Candidate given names
@@ -75,6 +92,12 @@ router.get(
     const decadeIds = req.query.decadeIds
       ? (req.query.decadeIds as string).split(",").map(Number)
       : null;
+    const languageIds = req.query.languageIds
+      ? (req.query.languageIds as string).split(",").map(Number)
+      : null;
+    const cultureIds = req.query.cultureIds
+      ? (req.query.cultureIds as string).split(",").map(Number)
+      : null;
     const limit = req.query.limit ? Number(req.query.limit) : null;
     const include = String(req.query.include ?? "")
       .split(",")
@@ -86,6 +109,8 @@ router.get(
       popularity,
       genders,
       decadeIds,
+      languageIds,
+      cultureIds,
       limit,
       includeMeta,
     );

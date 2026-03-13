@@ -64,45 +64,6 @@ router.post(
     return res
       .status(200)
       .json({ message: "Given name action updated successfully" });
-
-    // //const { newState } = req.body;
-    // const body = req.body.v1GivenNameActionRequest ?? req.body;
-
-    // const givenCustomNameBridgeId = Number(body.givenCustomNameBridgeId);
-    // const newState = parseNameState(body.newState);
-
-    // if (!Number.isInteger(givenCustomNameBridgeId)) {
-    //   return res
-    //     .status(400)
-    //     .json({ message: "Invalid givenCustomNameBridgeId" });
-    // }
-
-    // if (typeof newState !== "string" || !allowed.has(newState as any)) {
-    //   return res.status(400).json({ message: "Invalid newState" });
-    // }
-
-    // await updateGivenNameAction(
-    //   userId,
-    //   givenCustomNameBridgeId,
-    //   newState as NameState,
-    // );
-    // return res
-    //   .status(200)
-    //   .json({ message: "Given name action updated successfully" });
-    // // const givenCustomNameBridgeId = req.body.givenCustomNameBridgeId as number;
-    // const newState = req.body.newState as typeof NameState;
-    // logger.debug(
-    //   `givenCustomNameBridgeId type; ${typeof givenCustomNameBridgeId}`,
-    // );
-    // logger.debug(`givenCustomNameBridgeId ${givenCustomNameBridgeId}`);
-    // logger.debug(`newState: ${newState}`);
-
-    // if (typeof givenCustomNameBridgeId !== "number" || !newState) {
-    //   return res.status(400).json({ message: "Invalid request parameters" });
-    // }
-
-    // await updateGivenNameAction(userId, givenCustomNameBridgeId, newState);
-    // res.status(200).json({ message: "Given name action updated successfully" });
   },
 );
 

@@ -8,16 +8,35 @@ export default async (
   popularity: number | null,
   genders: GenderType[] | null,
   decadeIds: number[] | null,
+  languageIds: number[] | null,
+  cultureIds: number[] | null,
   limit: number | null,
   includeMeta = false,
 ): Promise<GivenName[]> => {
+  console.log("🚀 ~ includeMeta:", includeMeta);
+  console.log("🚀 ~ limit:", limit);
+  console.log("🚀 ~ cultureIds:", cultureIds);
+  console.log("🚀 ~ languageIds:", languageIds);
+  console.log("🚀 ~ decadeIds:", decadeIds);
+  console.log("🚀 ~ genders:", genders);
+  console.log("🚀 ~ popularity:", popularity);
+  console.log("🚀 ~ userId:", userId);
   logger.info(`Fetching name candidates for user ID: ${userId}`);
   try {
     if (includeMeta) {
       logger.info(`Including meta information for user ID: ${userId}`);
+
       const { rows } = await pool.query(
-        "SELECT * FROM get_name_candidates_meta($1, $2, $3, $4, $5);",
-        [userId, popularity, genders, decadeIds, limit],
+        "SELECT * FROM get_name_candidates_meta($1, $2, $3, $4, $5, $6, $7);",
+        [
+          userId,
+          popularity,
+          genders,
+          decadeIds,
+          languageIds,
+          cultureIds,
+          limit,
+        ],
       );
       return rows.map((row) => ({
         givenName: row.out_given_name,
