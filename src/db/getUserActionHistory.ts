@@ -1,7 +1,7 @@
 import { pool } from "../utils/dbController";
 import { logger } from "../utils/logger";
 import UserActionHistory from "../models/UserActionHistory";
-import NameState from "../models/NameState";
+import { NameState } from "../models/NameState";
 
 export default async (userId: number): Promise<UserActionHistory[]> => {
   logger.debug(`Fetching action history for user ID: ${userId}`);

@@ -1,11 +1,11 @@
 import { pool } from "../utils/dbController";
 import { logger } from "../utils/logger";
-import NameState from "../models/NameState";
+import { NameState } from "../models/NameState";
 
 export default async (
   userId: number,
   givenCustomNameBridgeId: number,
-  newState: typeof NameState,
+  newState: NameState,
 ): Promise<void> => {
   logger.debug(
     `Updating given name action for user ID: ${userId} with custom name bridge ID: ${givenCustomNameBridgeId} to state: ${newState}`,

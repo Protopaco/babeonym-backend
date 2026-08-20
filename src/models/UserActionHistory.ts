@@ -1,4 +1,4 @@
-import NameState from "./NameState";
+import { NameState } from "./NameState";
 
 export default interface UserActionHistory {
   givenName: string;
