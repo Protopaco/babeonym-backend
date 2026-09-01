@@ -6,8 +6,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
-      "description": "Development server"
+      "url": "http://localhost:2221",
+      "description": "API server"
     }
   ],
   "components": {
@@ -653,57 +653,54 @@
     }
   },
   "paths": {
-    "/api/v1/auth/anonymous": {
-      "get": {
-        "operationId": "v1AuthAnonymous",
-        "summary": "Create an anonymous user session",
-        "description": "Creates a new anonymous user and logs them in via session cookie.",
+    "/api/v1/user/settings": {
+      "put": {
+        "operationId": "v1UserSettings",
+        "summary": "Update user settings",
+        "description": "Updates the authenticated user's settings such as theme and surname.",
         "tags": [
-          "Auth"
+          "User"
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1UserSettingsRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Anonymous session created",
+            "description": "User settings updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/V1AuthAnonymous200Response"
+                  "$ref": "#/components/schemas/UserSettingsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "User is already authenticated",
+            "description": "Invalid input (missing fields, invalid theme, or inappropriate language)",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/V1AuthAnonymous400Response"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
           },
           "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/google": {
-      "get": {
-        "operationId": "v1AuthGoogle",
-        "summary": "Start Google OAuth login",
-        "description": "Redirects the user to Google OAuth consent screen.",
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirect to Google OAuth provider",
-            "headers": {
-              "Location": {
-                "description": "Redirect URL",
+            "description": "Failed to update user settings",
+            "content": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -711,101 +708,100 @@
         }
       }
     },
-    "/api/v1/auth/google/callback": {
-      "get": {
-        "operationId": "v2AuthGoogleCallback",
-        "summary": "Handle Google OAuth callback",
-        "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "code",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "OAuth authorization code returned by Google"
-          },
-          {
-            "in": "query",
-            "name": "authError",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "OAuth error returned by Google"
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirect to frontend (success, linking flow, or error)"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/microsoft": {
-      "get": {
-        "operationId": "v1AuthMicrosoft",
-        "summary": "Start Microsoft OAuth login",
-        "description": "Redirects the user to Microsoft OAuth consent screen.",
-        "tags": [
-          "Auth"
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirect to Microsoft OAuth provider"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/microsoft/callback": {
-      "get": {
-        "operationId": "v1AuthMicrosoftCallback",
-        "summary": "Handle Microsoft OAuth callback",
-        "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
-        "tags": [
-          "Auth"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "code",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "OAuth authorization code returned by Microsoft"
-          },
-          {
-            "in": "query",
-            "name": "autherror",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "OAuth error returned by Microsoft"
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirect to frontend (success, linking flow, or error)"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/logout": {
+    "/api/v1/user/me/reset": {
       "post": {
-        "operationId": "v1AuthLogout",
-        "summary": "Log out the current user",
+        "operationId": "v1UserReset",
+        "summary": "Reset user state",
+        "description": "Resets the authenticated user's data to an initial state.",
         "tags": [
-          "Auth"
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/user/actionHistory": {
+      "get": {
+        "operationId": "v1UserActionHistory",
+        "summary": "Get user action history",
+        "description": "Returns the authenticated user's given-name action history.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "User action history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActionHistoryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          },
+          "404": {
+            "description": "User not found in request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user/me": {
+      "get": {
+        "operationId": "v1UserGet",
+        "summary": "Get current user",
+        "description": "Returns the currently authenticated user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserMeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "v1UserDelete",
+        "summary": "Delete current user",
+        "description": "Deletes the authenticated user account, logs them out, and destroys the session.",
+        "tags": [
+          "User"
         ],
         "responses": {
           "204": {
-            "description": "Logout successful"
+            "description": "User deleted and session terminated"
           },
           "401": {
             "$ref": "#/components/responses/NotAuthenticated"
@@ -816,24 +812,21 @@
         }
       }
     },
-    "/api/v1/givenName/approved": {
+    "/api/v1/reference/languages": {
       "get": {
-        "operationId": "v1GivenNameApproved",
-        "summary": "Get approved given names",
-        "description": "Returns the authenticated user's approved given names.",
+        "operationId": "v1ReferenceLanguages",
+        "summary": "Get languages",
+        "description": "Returns the list of available languages.",
         "tags": [
-          "GivenName"
+          "Reference"
         ],
         "responses": {
           "200": {
-            "description": "Approved given names",
+            "description": "List of languages",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GivenName"
-                  }
+                  "$ref": "#/components/schemas/ReferenceLanguagesResponse"
                 }
               }
             }
@@ -844,38 +837,119 @@
         }
       }
     },
-    "/api/v1/givenName/etymology/{givenCustomNameBridgeId}": {
+    "/api/v1/reference/decades": {
       "get": {
-        "operationId": "v1GivenNameEtymology",
-        "summary": "Get given name etymology",
-        "description": "Returns etymology information for a specific given name.",
+        "operationId": "v1ReferenceDecades",
+        "summary": "Get decades",
+        "description": "Returns the list of available decades.",
         "tags": [
-          "GivenName"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "givenCustomNameBridgeId",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "ID of the given name"
-          }
+          "Reference"
         ],
         "responses": {
           "200": {
-            "description": "Etymology data",
+            "description": "List of decades",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Etymology"
+                  "$ref": "#/components/schemas/ReferenceDecadesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/reference/cultures": {
+      "get": {
+        "operationId": "v1ReferenceCultures",
+        "summary": "Get cultures",
+        "description": "Returns the list of available cultures.",
+        "tags": [
+          "Reference"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of cultures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceCulturesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "v1Health",
+        "summary": "Health check",
+        "description": "Returns service health status.",
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service is unhealthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/givenName/action": {
+      "post": {
+        "operationId": "v1GivenNameAction",
+        "summary": "Update given name state",
+        "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
+        "tags": [
+          "GivenName"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1GivenNameActionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Given name action updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid givenCustomNameBridgeId",
+            "description": "Invalid request parameters",
             "content": {
               "application/json": {
                 "schema": {
@@ -890,51 +964,82 @@
         }
       }
     },
-    "/api/v1/givenName/search": {
-      "get": {
-        "operationId": "v1GivenNameSearch",
-        "summary": "Search given names",
-        "description": "Searches given names for the authenticated user using a text query.\n",
+    "/api/v1/givenName/custom": {
+      "post": {
+        "operationId": "v1GivenNameCustom",
+        "summary": "Add a custom given name",
+        "description": "Adds a user-defined custom given name for the authenticated user.",
         "tags": [
           "GivenName"
         ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "search",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Search text for given names"
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10
-            },
-            "description": "Maximum number of results to return"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1GivenNameCustomRequest"
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "200": {
-            "description": "Matching given names",
+            "description": "Custom given name added successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GivenName"
-                  }
+                  "$ref": "#/components/schemas/SuccessResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Missing required search query",
+            "description": "Invalid or inappropriate custom given name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      }
+    },
+    "/api/v1/givenName/compare": {
+      "post": {
+        "operationId": "v1GivenNameCompare",
+        "summary": "Compare two given names",
+        "description": "Records a comparison result between two given names for the authenticated user.",
+        "tags": [
+          "GivenName"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1GivenNameCompareRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comparison recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid winnerId or loserId",
             "content": {
               "application/json": {
                 "schema": {
@@ -1047,37 +1152,51 @@
         }
       }
     },
-    "/api/v1/givenName/compare": {
-      "post": {
-        "operationId": "v1GivenNameCompare",
-        "summary": "Compare two given names",
-        "description": "Records a comparison result between two given names for the authenticated user.",
+    "/api/v1/givenName/search": {
+      "get": {
+        "operationId": "v1GivenNameSearch",
+        "summary": "Search given names",
+        "description": "Searches given names for the authenticated user using a text query.\n",
         "tags": [
           "GivenName"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/V1GivenNameCompareRequest"
-              }
-            }
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search text for given names"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Maximum number of results to return"
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Comparison recorded successfully",
+            "description": "Matching given names",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GivenName"
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid winnerId or loserId",
+            "description": "Missing required search query",
             "content": {
               "application/json": {
                 "schema": {
@@ -1092,37 +1211,38 @@
         }
       }
     },
-    "/api/v1/givenName/custom": {
-      "post": {
-        "operationId": "v1GivenNameCustom",
-        "summary": "Add a custom given name",
-        "description": "Adds a user-defined custom given name for the authenticated user.",
+    "/api/v1/givenName/etymology/{givenCustomNameBridgeId}": {
+      "get": {
+        "operationId": "v1GivenNameEtymology",
+        "summary": "Get given name etymology",
+        "description": "Returns etymology information for a specific given name.",
         "tags": [
           "GivenName"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/V1GivenNameCustomRequest"
-              }
-            }
+        "parameters": [
+          {
+            "in": "path",
+            "name": "givenCustomNameBridgeId",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the given name"
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Custom given name added successfully",
+            "description": "Etymology data",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "$ref": "#/components/schemas/Etymology"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid or inappropriate custom given name",
+            "description": "Invalid givenCustomNameBridgeId",
             "content": {
               "application/json": {
                 "schema": {
@@ -1137,41 +1257,24 @@
         }
       }
     },
-    "/api/v1/givenName/action": {
-      "post": {
-        "operationId": "v1GivenNameAction",
-        "summary": "Update given name state",
-        "description": "Updates the state of a given name (approved, rejected, or snoozed) for the authenticated user.",
+    "/api/v1/givenName/approved": {
+      "get": {
+        "operationId": "v1GivenNameApproved",
+        "summary": "Get approved given names",
+        "description": "Returns the authenticated user's approved given names.",
         "tags": [
           "GivenName"
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/V1GivenNameActionRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "Given name action updated successfully",
+            "description": "Approved given names",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GivenName"
+                  }
                 }
               }
             }
@@ -1182,124 +1285,16 @@
         }
       }
     },
-    "/api/v1/health": {
-      "get": {
-        "operationId": "v1Health",
-        "summary": "Health check",
-        "description": "Returns service health status.",
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "v1AuthLogout",
+        "summary": "Log out the current user",
         "tags": [
-          "Health"
-        ],
-        "responses": {
-          "200": {
-            "description": "Service is healthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthStatus"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Service is unhealthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthStatus"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/reference/cultures": {
-      "get": {
-        "operationId": "v1ReferenceCultures",
-        "summary": "Get cultures",
-        "description": "Returns the list of available cultures.",
-        "tags": [
-          "Reference"
-        ],
-        "responses": {
-          "200": {
-            "description": "List of cultures",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReferenceCulturesResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          }
-        }
-      }
-    },
-    "/api/v1/reference/decades": {
-      "get": {
-        "operationId": "v1ReferenceDecades",
-        "summary": "Get decades",
-        "description": "Returns the list of available decades.",
-        "tags": [
-          "Reference"
-        ],
-        "responses": {
-          "200": {
-            "description": "List of decades",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReferenceDecadesResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          }
-        }
-      }
-    },
-    "/api/v1/reference/languages": {
-      "get": {
-        "operationId": "v1ReferenceLanguages",
-        "summary": "Get languages",
-        "description": "Returns the list of available languages.",
-        "tags": [
-          "Reference"
-        ],
-        "responses": {
-          "200": {
-            "description": "List of languages",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReferenceLanguagesResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          }
-        }
-      }
-    },
-    "/api/v1/user/me": {
-      "delete": {
-        "operationId": "v1UserDelete",
-        "summary": "Delete current user",
-        "description": "Deletes the authenticated user account, logs them out, and destroys the session.",
-        "tags": [
-          "User"
+          "Auth"
         ],
         "responses": {
           "204": {
-            "description": "User deleted and session terminated"
+            "description": "Logout successful"
           },
           "401": {
             "$ref": "#/components/responses/NotAuthenticated"
@@ -1308,59 +1303,109 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         }
-      },
+      }
+    },
+    "/api/v1/auth/microsoft/callback": {
       "get": {
-        "operationId": "v1UserGet",
-        "summary": "Get current user",
-        "description": "Returns the currently authenticated user.",
+        "operationId": "v1AuthMicrosoftCallback",
+        "summary": "Handle Microsoft OAuth callback",
+        "description": "Handles the Microsoft OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
         "tags": [
-          "User"
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth authorization code returned by Microsoft"
+          },
+          {
+            "in": "query",
+            "name": "autherror",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth error returned by Microsoft"
+          }
         ],
         "responses": {
-          "200": {
-            "description": "Current user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserMeResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
+          "302": {
+            "description": "Redirect to frontend (success, linking flow, or error)"
           }
         }
       }
     },
-    "/api/v1/user/actionHistory": {
+    "/api/v1/auth/microsoft": {
       "get": {
-        "operationId": "v1UserActionHistory",
-        "summary": "Get user action history",
-        "description": "Returns the authenticated user's given-name action history.",
+        "operationId": "v1AuthMicrosoft",
+        "summary": "Start Microsoft OAuth login",
+        "description": "Redirects the user to Microsoft OAuth consent screen.",
         "tags": [
-          "User"
+          "Auth"
         ],
         "responses": {
-          "200": {
-            "description": "User action history",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserActionHistoryResponse"
-                }
-              }
-            }
+          "302": {
+            "description": "Redirect to Microsoft OAuth provider"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google/callback": {
+      "get": {
+        "operationId": "v2AuthGoogleCallback",
+        "summary": "Handle Google OAuth callback",
+        "description": "Handles the Google OAuth callback, links or logs in a user as needed, and redirects to the frontend with success or error state.\n",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth authorization code returned by Google"
           },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          },
-          "404": {
-            "description": "User not found in request",
-            "content": {
-              "application/json": {
+          {
+            "in": "query",
+            "name": "authError",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "OAuth error returned by Google"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to frontend (success, linking flow, or error)"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google": {
+      "get": {
+        "operationId": "v1AuthGoogle",
+        "summary": "Start Google OAuth login",
+        "description": "Redirects the user to Google OAuth consent screen.",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to Google OAuth provider",
+            "headers": {
+              "Location": {
+                "description": "Redirect URL",
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "string"
                 }
               }
             }
@@ -1368,82 +1413,37 @@
         }
       }
     },
-    "/api/v1/user/me/reset": {
-      "post": {
-        "operationId": "v1UserReset",
-        "summary": "Reset user state",
-        "description": "Resets the authenticated user's data to an initial state.",
+    "/api/v1/auth/anonymous": {
+      "get": {
+        "operationId": "v1AuthAnonymous",
+        "summary": "Create an anonymous user session",
+        "description": "Creates a new anonymous user and logs them in via session cookie.",
         "tags": [
-          "User"
+          "Auth"
         ],
         "responses": {
           "200": {
-            "description": "User reset successfully",
+            "description": "Anonymous session created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          }
-        }
-      }
-    },
-    "/api/v1/user/settings": {
-      "put": {
-        "operationId": "v1UserSettings",
-        "summary": "Update user settings",
-        "description": "Updates the authenticated user's settings such as theme and surname.",
-        "tags": [
-          "User"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/V1UserSettingsRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "User settings updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsResponse"
+                  "$ref": "#/components/schemas/V1AuthAnonymous200Response"
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid input (missing fields, invalid theme, or inappropriate language)",
+            "description": "User is already authenticated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/V1AuthAnonymous400Response"
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
           },
           "500": {
-            "description": "Failed to update user settings",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }

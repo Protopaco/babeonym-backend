@@ -9,7 +9,7 @@ import AuthProvider from "../../../models/AuthProvider.js";
 dotenv.config();
 const router = express.Router();
 const frontEndBaseUrl =
-  process.env.FRONTEND_BASE_URL || "http://localhost:4200";
+  process.env.FRONTEND_BASE_URL || "http://localhost:2223";
 
 /**
  * @swagger
@@ -45,22 +45,22 @@ router.get("/microsoft/callback", async (req, res, next) => {
 
   if (req.query.error) {
     return res.redirect(
-      `${frontEndBaseUrl}/login?error=oauth&details=${req.query.error}`,
+      `${frontEndBaseUrl}/error?error=oauth&details=${req.query.error}`,
     );
   }
 
   if (!req.query.code) {
-    return res.redirect(`${frontEndBaseUrl}/login?error=oauth&details=no_code`);
+    return res.redirect(`${frontEndBaseUrl}/error?error=oauth&details=no_code`);
   }
 
   await passport.authenticate("microsoft", async (err: any, user: any) => {
     if (err) {
-      return res.redirect(`${frontEndBaseUrl}/login?error=oauth`);
+      return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
     }
 
     if (!user || typeof user !== "object") {
       return res.redirect(
-        `${frontEndBaseUrl}/login?error=oauth&details=no_user`,
+        `${frontEndBaseUrl}/error?error=oauth&details=no_user`,
       );
     }
 
@@ -87,9 +87,9 @@ router.get("/microsoft/callback", async (req, res, next) => {
 
     req.logIn(user, (err) => {
       if (err) {
-        return res.redirect(`${frontEndBaseUrl}/user/login?error=oauth`);
+        return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
       }
-      return res.redirect(`${frontEndBaseUrl}/user/login/success`);
+      return res.redirect(`${frontEndBaseUrl}/`);
     });
   })(req, res, next);
 });

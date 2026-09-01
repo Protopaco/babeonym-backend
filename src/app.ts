@@ -58,7 +58,7 @@ app.use(pinoHttp({ logger }));
 app.use(
   cors({
     origin: [
-      "http://localhost:4200", // Development
+      "http://localhost:2223", // Development
       "https://babeonym.com", // Your domain
       "https://api.babeonym.com", // API subdomain
       "https://www.babeonym.com", // www version
@@ -200,7 +200,7 @@ passport.deserializeUser(async (userId: number, done) => {
   done(null, userFromDb);
 });
 
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(process.env.PORT || 2221);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
 
 const server = app.listen(PORT, HOST, () => {
