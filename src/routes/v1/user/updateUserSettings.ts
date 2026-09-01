@@ -6,7 +6,6 @@ import isBadWord from "../../../utils/isBadWord.js";
 import updateUserSettings from "../../../db/updateUserSettings";
 import UserSettings from "../../../models/UserSettings";
 import User from "../../../models/User";
-import { parseTheme } from "../../../models/Theme";
 
 /**
  * @swagger
@@ -14,7 +13,7 @@ import { parseTheme } from "../../../models/Theme";
  *   put:
  *     operationId: v1UserSettings
  *     summary: Update user settings
- *     description: Updates the authenticated user's settings such as theme and surname.
+ *     description: Updates the authenticated user's settings such as surname.
  *     tags:
  *       - User
  *     requestBody:
@@ -31,7 +30,7 @@ import { parseTheme } from "../../../models/Theme";
  *             schema:
  *               $ref: '#/components/schemas/UserSettingsResponse'
  *       400:
- *         description: Invalid input (missing fields, invalid theme, or inappropriate language)
+ *         description: Invalid input (invalid surName value or inappropriate language)
  *         content:
  *           application/json:
  *             schema:
@@ -51,28 +50,26 @@ router.put(
   ensureAuthenticated,
   async (req: Request, res: Response) => {
     const userId = (req.user as User).id;
-    const { theme: rawTheme, surName } = req.body;
+    const { surName: rawSurName } = req.body;
 
     logger.info(
-      `Received request to update settings for user ID: ${userId} with theme: ${rawTheme} and surName: ${surName}`,
+      `Received request to update settings for user ID: ${userId} with surName: ${rawSurName}`,
     );
 
-    if (rawTheme === undefined || surName === undefined) {
-      logger.warn(
-        `Missing theme or surName in request body for user ID: ${userId}`,
-      );
-      return res
-        .status(400)
-        .send({ message: "Missing theme or surName in request body" });
-    }
-    const theme = parseTheme(rawTheme);
-    if (theme === null) {
-      logger.warn(`Invalid theme value: ${rawTheme} for user ID: ${userId}`);
-      return res.status(400).send({ message: "Invalid theme value" });
+    if (rawSurName !== undefined && rawSurName !== null) {
+      if (typeof rawSurName !== "string") {
+        logger.warn(`Invalid surName type for user ID: ${userId}`);
+        return res.status(400).send({ message: "Invalid surName value" });
+      }
     }
 
-    const surNameNaughty = isBadWord(surName);
-    if (surNameNaughty) {
+    // An omitted, null, or blank surname all mean "no surname set". The column
+    // is nullable, so they normalize to null rather than an empty string.
+    const trimmedSurName =
+      typeof rawSurName === "string" ? rawSurName.trim() : "";
+    const surName = trimmedSurName === "" ? null : trimmedSurName;
+
+    if (surName !== null && isBadWord(surName)) {
       logger.warn(
         `Attempt to set surName to a bad word for user ID: ${userId}`,
       );
@@ -84,7 +81,6 @@ router.put(
     try {
       const updatedSettings: UserSettings = await updateUserSettings(
         userId,
-        theme,
         surName,
       );
       logger.info(`Successfully updated settings for user ID: ${userId}`);

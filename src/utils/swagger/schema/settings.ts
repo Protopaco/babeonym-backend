@@ -1,10 +1,12 @@
 const settingsSchemas = {
   V1UserSettingsRequest: {
     type: "object",
-    required: ["theme", "surName"],
     properties: {
-      theme: { type: "string", description: "Theme identifier" },
-      surName: { type: "string", description: "User surname" },
+      surName: {
+        type: "string",
+        nullable: true,
+        description: "User surname. Omit or send null to leave it unset.",
+      },
     },
   },
 

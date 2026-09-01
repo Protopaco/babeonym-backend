@@ -1,7 +1,7 @@
 const userSettingsSchemas = {
   UserSettings: {
     type: "object",
-    required: ["userId", "theme", "surName"],
+    required: ["userId", "theme"],
     properties: {
       userId: {
         type: "number",
@@ -14,6 +14,7 @@ const userSettingsSchemas = {
       },
       surName: {
         type: "string",
+        nullable: true,
         example: "Stevens",
       },
     },

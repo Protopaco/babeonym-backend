@@ -4,16 +4,15 @@ import { logger } from "../utils/logger";
 
 export default async (
   userId: number,
-  theme: string,
-  surName: string,
+  surName: string | null,
 ): Promise<UserSettings> => {
   logger.info(
-    `Updating user settings for user ID: ${userId} with theme: ${theme} and surName: ${surName}`,
+    `Updating user settings for user ID: ${userId} with surName: ${surName}`,
   );
   try {
     const { rows } = await pool.query(
-      "SELECT * FROM update_user_settings($1, $2, $3)",
-      [userId, theme, surName],
+      "SELECT * FROM update_user_settings($1, $2)",
+      [userId, surName],
     );
     logger.debug(rows);
     const updatedSettings: UserSettings = {

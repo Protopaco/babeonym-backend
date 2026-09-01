@@ -460,18 +460,11 @@
       },
       "V1UserSettingsRequest": {
         "type": "object",
-        "required": [
-          "theme",
-          "surName"
-        ],
         "properties": {
-          "theme": {
-            "type": "string",
-            "description": "Theme identifier"
-          },
           "surName": {
             "type": "string",
-            "description": "User surname"
+            "nullable": true,
+            "description": "User surname. Omit or send null to leave it unset."
           }
         }
       },
@@ -589,8 +582,7 @@
         "type": "object",
         "required": [
           "userId",
-          "theme",
-          "surName"
+          "theme"
         ],
         "properties": {
           "userId": {
@@ -604,6 +596,7 @@
           },
           "surName": {
             "type": "string",
+            "nullable": true,
             "example": "Stevens"
           }
         }
@@ -657,7 +650,7 @@
       "put": {
         "operationId": "v1UserSettings",
         "summary": "Update user settings",
-        "description": "Updates the authenticated user's settings such as theme and surname.",
+        "description": "Updates the authenticated user's settings such as surname.",
         "tags": [
           "User"
         ],
@@ -683,7 +676,7 @@
             }
           },
           "400": {
-            "description": "Invalid input (missing fields, invalid theme, or inappropriate language)",
+            "description": "Invalid input (invalid surName value or inappropriate language)",
             "content": {
               "application/json": {
                 "schema": {
