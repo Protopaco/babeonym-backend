@@ -12,6 +12,7 @@ import languageSchemas from "./language";
 import notAuthenticatedSchemas from "./notAuthenticated";
 import settingsSchemas from "./settings";
 import successSchemas from "./success";
+import themeSchemas from "./theme";
 import userSchemas from "./user";
 import userActionHistorySchemas from "./userActionHistory";
 import userSettingsSchemas from "./userSettings";
@@ -31,6 +32,7 @@ const schemas = {
   ...notAuthenticatedSchemas,
   ...settingsSchemas,
   ...successSchemas,
+  ...themeSchemas,
   ...userSchemas,
   ...userActionHistorySchemas,
   ...userSettingsSchemas,

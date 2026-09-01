@@ -490,6 +490,18 @@
           }
         }
       },
+      "V1UserThemeRequest": {
+        "type": "object",
+        "required": [
+          "theme"
+        ],
+        "properties": {
+          "theme": {
+            "type": "string",
+            "description": "Theme identifier"
+          }
+        }
+      },
       "User": {
         "type": "object",
         "required": [
@@ -646,6 +658,54 @@
     }
   },
   "paths": {
+    "/api/v1/user/theme": {
+      "put": {
+        "operationId": "v1UserTheme",
+        "summary": "Update user theme",
+        "description": "Updates the authenticated user's theme.",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1UserThemeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "User theme updated"
+          },
+          "400": {
+            "description": "Invalid input (missing or invalid theme)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          },
+          "500": {
+            "description": "Failed to update user theme",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/user/settings": {
       "put": {
         "operationId": "v1UserSettings",
