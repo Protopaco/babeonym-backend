@@ -61,7 +61,7 @@ router.get("/google/callback", async (req, res, next) => {
     "google",
     async (err: any, user: any, info: any) => {
       if (err) {
-        logger.error("Google OAuth error:", err);
+        logger.error(err, "Google OAuth error");
         return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
       }
       if (!user) {
@@ -119,7 +119,7 @@ router.get("/google/callback", async (req, res, next) => {
       } else if (!user.isNewUser) {
         req.logIn(user, (err) => {
           if (err) {
-            logger.error("Login error:", err);
+            logger.error(err, "Login error");
             return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
           } else {
             logger.info("User logged in successfully:", user.email);

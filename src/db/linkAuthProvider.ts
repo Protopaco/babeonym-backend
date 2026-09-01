@@ -12,7 +12,7 @@ export default async (
   logger.info(`Linking auth provider ${authProvider} to user ${userId}`);
   try {
     await pool.query(
-      "INSERT INTO link_auth_provider(user_id, auth_provider, foreign_id, email, username) VALUES ($1, $2, $3, $4, $5);",
+      "SELECT * FROM link_auth_provider($1, $2, $3, $4, $5);",
       [userId, authProvider, foreignId, email, username],
     );
   } catch (err) {
