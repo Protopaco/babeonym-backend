@@ -4,6 +4,7 @@ import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import { logger } from "../../../utils/logger";
 import { NameState, parseNameState } from "../../../models/NameState";
 import updateGivenNameAction from "../../../db/updateGivenNameAction";
+import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
 import User from "../../../models/User";
 
 /**
@@ -23,11 +24,11 @@ import User from "../../../models/User";
  *             $ref: '#/components/schemas/V1GivenNameActionRequest'
  *     responses:
  *       200:
- *         description: Given name action updated successfully
+ *         description: The user's approved given names after the action
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *               $ref: '#/components/schemas/ApprovedGivenNamesResponse'
  *       400:
  *         description: Invalid request parameters
  *         content:
@@ -61,9 +62,9 @@ router.post(
     }
 
     await updateGivenNameAction(userId, givenCustomNameBridgeId, newState);
-    return res
-      .status(200)
-      .json({ message: "Given name action updated successfully" });
+
+    const approvedGivenNames = await getApprovedGivenNames(userId);
+    return res.status(200).json({ approvedGivenNames });
   },
 );
 

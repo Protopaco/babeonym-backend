@@ -1,4 +1,14 @@
 const givenNameSchemas = {
+  ApprovedGivenNamesResponse: {
+    type: "object",
+    required: ["approvedGivenNames"],
+    properties: {
+      approvedGivenNames: {
+        type: "array",
+        items: { $ref: "#/components/schemas/GivenName" },
+      },
+    },
+  },
   GivenName: {
     type: "object",
     required: ["givenName", "givenCustomNameBridgeId", "rating"],

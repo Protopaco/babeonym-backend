@@ -316,6 +316,20 @@
           }
         }
       },
+      "ApprovedGivenNamesResponse": {
+        "type": "object",
+        "required": [
+          "approvedGivenNames"
+        ],
+        "properties": {
+          "approvedGivenNames": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GivenName"
+            }
+          }
+        }
+      },
       "GivenName": {
         "type": "object",
         "required": [
@@ -992,11 +1006,11 @@
         },
         "responses": {
           "200": {
-            "description": "Given name action updated successfully",
+            "description": "The user's approved given names after the action",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "$ref": "#/components/schemas/ApprovedGivenNamesResponse"
                 }
               }
             }
@@ -1037,11 +1051,11 @@
         },
         "responses": {
           "200": {
-            "description": "Custom given name added successfully",
+            "description": "The user's approved given names after the custom name is added",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "$ref": "#/components/schemas/ApprovedGivenNamesResponse"
                 }
               }
             }

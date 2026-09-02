@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import addCustomGivenName from "../../../db/addCustomGivenName";
+import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
 import isBadWord from "../../../utils/isBadWord.js";
@@ -23,11 +24,11 @@ import isBadWord from "../../../utils/isBadWord.js";
  *             $ref: '#/components/schemas/V1GivenNameCustomRequest'
  *     responses:
  *       200:
- *         description: Custom given name added successfully
+ *         description: The user's approved given names after the custom name is added
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *               $ref: '#/components/schemas/ApprovedGivenNamesResponse'
  *       400:
  *         description: Invalid or inappropriate custom given name
  *         content:
@@ -57,7 +58,9 @@ router.post(
     }
 
     await addCustomGivenName(userId, customGivenName);
-    res.status(200).json({ message: "Custom given name added successfully" });
+
+    const approvedGivenNames = await getApprovedGivenNames(userId);
+    res.status(200).json({ approvedGivenNames });
   },
 );
 
