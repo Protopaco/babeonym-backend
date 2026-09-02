@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import compareGivenNames from "../../../db/compareGivenNames";
+import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
 
@@ -22,11 +23,11 @@ import User from "../../../models/User.js";
  *             $ref: '#/components/schemas/V1GivenNameCompareRequest'
  *     responses:
  *       200:
- *         description: Comparison recorded successfully
+ *         description: The user's approved given names after the comparison
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *               $ref: '#/components/schemas/ApprovedGivenNamesResponse'
  *       400:
  *         description: Invalid winnerId or loserId
  *         content:
@@ -56,9 +57,9 @@ router.post(
     );
 
     await compareGivenNames(userId, winnerId, loserId);
-    res
-      .status(200)
-      .json({ message: "Given name comparison updated successfully" });
+
+    const approvedGivenNames = await getApprovedGivenNames(userId);
+    res.status(200).json({ approvedGivenNames });
   },
 );
 

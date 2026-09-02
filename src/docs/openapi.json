@@ -1096,11 +1096,11 @@
         },
         "responses": {
           "200": {
-            "description": "Comparison recorded successfully",
+            "description": "The user's approved given names after the comparison",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessResponse"
+                  "$ref": "#/components/schemas/ApprovedGivenNamesResponse"
                 }
               }
             }
