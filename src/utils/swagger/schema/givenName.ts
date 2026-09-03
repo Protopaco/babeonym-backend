@@ -1,11 +1,23 @@
 const givenNameSchemas = {
-  ApprovedGivenNamesResponse: {
+  GivenNameMutationResponse: {
     type: "object",
-    required: ["approvedGivenNames"],
+    required: ["approvedGivenNames", "user"],
     properties: {
       approvedGivenNames: {
         type: "array",
         items: { $ref: "#/components/schemas/GivenName" },
+      },
+      user: {
+        type: "object",
+        required: ["promptAccountCreation"],
+        properties: {
+          promptAccountCreation: {
+            type: "boolean",
+            description:
+              "The user has reached a point where offering account creation is worthwhile. Always false for users who are not anonymous.",
+            example: false,
+          },
+        },
       },
     },
   },

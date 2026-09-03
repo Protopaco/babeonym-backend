@@ -5,6 +5,7 @@ import { logger } from "../../../utils/logger";
 import { NameState, parseNameState } from "../../../models/NameState";
 import updateGivenNameAction from "../../../db/updateGivenNameAction";
 import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
+import shouldPromptAccountCreation from "../../../utils/shouldPromptAccountCreation";
 import User from "../../../models/User";
 
 /**
@@ -28,7 +29,7 @@ import User from "../../../models/User";
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ApprovedGivenNamesResponse'
+ *               $ref: '#/components/schemas/GivenNameMutationResponse'
  *       400:
  *         description: Invalid request parameters
  *         content:
@@ -43,7 +44,8 @@ router.post(
   "/action",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
-    const userId = (req.user as User).id;
+    const user = req.user as User;
+    const userId = user.id;
     logger.info(`POST given name action by user ID: ${userId}`);
 
     const body = req.body.v1GivenNameActionRequest ?? req.body;
@@ -64,7 +66,10 @@ router.post(
     await updateGivenNameAction(userId, givenCustomNameBridgeId, newState);
 
     const approvedGivenNames = await getApprovedGivenNames(userId);
-    return res.status(200).json({ approvedGivenNames });
+    const promptAccountCreation = await shouldPromptAccountCreation(user);
+    return res
+      .status(200)
+      .json({ approvedGivenNames, user: { promptAccountCreation } });
   },
 );
 

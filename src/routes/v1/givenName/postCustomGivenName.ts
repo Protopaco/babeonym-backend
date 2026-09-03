@@ -3,6 +3,7 @@ const router = Router();
 import ensureAuthenticated from "../../../middleware/ensureAuthenticated";
 import addCustomGivenName from "../../../db/addCustomGivenName";
 import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
+import shouldPromptAccountCreation from "../../../utils/shouldPromptAccountCreation.js";
 import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
 import isBadWord from "../../../utils/isBadWord.js";
@@ -28,7 +29,7 @@ import isBadWord from "../../../utils/isBadWord.js";
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ApprovedGivenNamesResponse'
+ *               $ref: '#/components/schemas/GivenNameMutationResponse'
  *       400:
  *         description: Invalid or inappropriate custom given name
  *         content:
@@ -43,7 +44,8 @@ router.post(
   "/custom",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
-    const userId = (req.user as User).id;
+    const user = req.user as User;
+    const userId = user.id;
     logger.info("Custom given name request by user ID: " + userId);
 
     const { customGivenName } = req.body;
@@ -60,7 +62,10 @@ router.post(
     await addCustomGivenName(userId, customGivenName);
 
     const approvedGivenNames = await getApprovedGivenNames(userId);
-    res.status(200).json({ approvedGivenNames });
+    const promptAccountCreation = await shouldPromptAccountCreation(user);
+    res
+      .status(200)
+      .json({ approvedGivenNames, user: { promptAccountCreation } });
   },
 );
 
