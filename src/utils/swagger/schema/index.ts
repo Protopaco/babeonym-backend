@@ -1,14 +1,11 @@
 import actionSchemas from "./action";
 import authSchemas from "./auth";
 import compareSchemas from "./compare";
-import cultureSchemas from "./cultures";
 import customSchemas from "./custom";
-import decadeSchemas from "./decade";
 import errorSchemas from "./errorSchemas";
 import etymologySchemas from "./etymology";
 import givenNameSchemas from "./givenName";
 import healthSchemas from "./health";
-import languageSchemas from "./language";
 import nameFiltersSchemas from "./nameFilters";
 import notAuthenticatedSchemas from "./notAuthenticated";
 import settingsSchemas from "./settings";
@@ -22,14 +19,11 @@ const schemas = {
   ...actionSchemas,
   ...authSchemas,
   ...compareSchemas,
-  ...cultureSchemas,
   ...customSchemas,
-  ...decadeSchemas,
   ...errorSchemas,
   ...etymologySchemas,
   ...givenNameSchemas,
   ...healthSchemas,
-  ...languageSchemas,
   ...nameFiltersSchemas,
   ...notAuthenticatedSchemas,
   ...settingsSchemas,
