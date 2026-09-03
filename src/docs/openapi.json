@@ -474,6 +474,75 @@
           }
         }
       },
+      "FilterOption": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "searchText"
+        ],
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 4
+          },
+          "label": {
+            "type": "string",
+            "example": "Amharic"
+          },
+          "searchText": {
+            "type": "string",
+            "description": "Lowercased text a type-ahead matches against. Includes the label plus any region and continent the option belongs to.",
+            "example": "amharic east africa africa"
+          }
+        }
+      },
+      "NameFilters": {
+        "type": "object",
+        "required": [
+          "genderOptions",
+          "decadeOptions",
+          "cultureOptions",
+          "languageOptions"
+        ],
+        "properties": {
+          "genderOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterOption"
+            }
+          },
+          "decadeOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterOption"
+            }
+          },
+          "cultureOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterOption"
+            }
+          },
+          "languageOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterOption"
+            }
+          }
+        }
+      },
+      "ReferenceNameFiltersResponse": {
+        "type": "object",
+        "required": [
+          "nameFilters"
+        ],
+        "properties": {
+          "nameFilters": {
+            "$ref": "#/components/schemas/NameFilters"
+          }
+        }
+      },
       "NotAuthenticatedResponse": {
         "type": "object",
         "required": [
@@ -893,6 +962,31 @@
         }
       }
     },
+    "/api/v1/reference/nameFilters": {
+      "get": {
+        "operationId": "v1ReferenceNameFilters",
+        "summary": "Get name filter options",
+        "description": "Returns every filter option the name workspace offers, grouped by filter type. Each option carries the same shape, so a picker can render any group without knowing which one it has.\n",
+        "tags": [
+          "Reference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Name filter options",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceNameFiltersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
+          }
+        }
+      }
+    },
     "/api/v1/reference/languages": {
       "get": {
         "operationId": "v1ReferenceLanguages",
@@ -1155,13 +1249,13 @@
           },
           {
             "in": "query",
-            "name": "genders",
+            "name": "genderIds",
             "required": false,
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated list of genders.",
-            "example": "male,female"
+            "description": "Comma-separated list of gender IDs.",
+            "example": "2,3"
           },
           {
             "in": "query",

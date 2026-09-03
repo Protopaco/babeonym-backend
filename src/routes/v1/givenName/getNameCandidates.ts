@@ -4,7 +4,6 @@ import ensureAuthenticated from "../../../middleware/ensureAuthenticated.js";
 
 import { logger } from "../../../utils/logger.js";
 import getNameCandidates from "../../../db/getNameCandidates.js";
-import { GenderType } from "../../../models/Gender.js";
 import User from "../../../models/User.js";
 import GivenName from "../../../models/GivenName.js";
 
@@ -25,12 +24,12 @@ import GivenName from "../../../models/GivenName.js";
  *           type: number
  *         description: Popularity percentile target from 0.0 to 1.0.
  *       - in: query
- *         name: genders
+ *         name: genderIds
  *         required: false
  *         schema:
  *           type: string
- *         description: Comma-separated list of genders.
- *         example: male,female
+ *         description: Comma-separated list of gender IDs.
+ *         example: 2,3
  *       - in: query
  *         name: decadeIds
  *         required: false
@@ -95,8 +94,8 @@ router.get(
     const userId = (req.user as User).id;
     logger.info(`GET name candidates by user ID: ${userId}`);
     const popularity = Number(req.query.popularity) || null;
-    const genders: GenderType[] | null = req.query.genders
-      ? String(req.query.genders).split(",")
+    const genderIds = req.query.genderIds
+      ? (req.query.genderIds as string).split(",").map(Number).filter(Number.isInteger)
       : null;
 
     const decadeIds = req.query.decadeIds
@@ -123,7 +122,7 @@ router.get(
     const givenNames: GivenName[] = await getNameCandidates(
       userId,
       popularity,
-      genders,
+      genderIds,
       decadeIds,
       languageIds,
       cultureIds,

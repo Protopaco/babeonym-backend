@@ -1,12 +1,11 @@
 import { pool } from "../utils/dbController";
 import { logger } from "../utils/logger";
 import GivenName from "../models/GivenName";
-import Genders, { GenderType } from "../models/Gender";
 
 export default async (
   userId: number,
   popularity: number | null,
-  genders: GenderType[] | null,
+  genderIds: number[] | null,
   decadeIds: number[] | null,
   languageIds: number[] | null,
   cultureIds: number[] | null,
@@ -24,7 +23,7 @@ export default async (
         [
           userId,
           popularity,
-          genders,
+          genderIds,
           decadeIds,
           languageIds,
           cultureIds,
@@ -43,7 +42,7 @@ export default async (
         [
           userId,
           popularity,
-          genders,
+          genderIds,
           decadeIds,
           languageIds,
           cultureIds,

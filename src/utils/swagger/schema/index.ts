@@ -9,6 +9,7 @@ import etymologySchemas from "./etymology";
 import givenNameSchemas from "./givenName";
 import healthSchemas from "./health";
 import languageSchemas from "./language";
+import nameFiltersSchemas from "./nameFilters";
 import notAuthenticatedSchemas from "./notAuthenticated";
 import settingsSchemas from "./settings";
 import successSchemas from "./success";
@@ -29,6 +30,7 @@ const schemas = {
   ...givenNameSchemas,
   ...healthSchemas,
   ...languageSchemas,
+  ...nameFiltersSchemas,
   ...notAuthenticatedSchemas,
   ...settingsSchemas,
   ...successSchemas,
