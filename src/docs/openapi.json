@@ -1204,6 +1204,16 @@
           },
           {
             "in": "query",
+            "name": "excludeBridgeIds",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of given custom name bridge IDs the caller already holds. Used to top up a partly full queue without being handed the same names back.\n",
+            "example": "12,48,93"
+          },
+          {
+            "in": "query",
             "name": "include",
             "required": false,
             "schema": {

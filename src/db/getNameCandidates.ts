@@ -12,15 +12,8 @@ export default async (
   cultureIds: number[] | null,
   limit: number | null,
   includeMeta = false,
+  excludeBridgeIds: number[] | null = null,
 ): Promise<GivenName[]> => {
-  console.log("🚀 ~ includeMeta:", includeMeta);
-  console.log("🚀 ~ limit:", limit);
-  console.log("🚀 ~ cultureIds:", cultureIds);
-  console.log("🚀 ~ languageIds:", languageIds);
-  console.log("🚀 ~ decadeIds:", decadeIds);
-  console.log("🚀 ~ genders:", genders);
-  console.log("🚀 ~ popularity:", popularity);
-  console.log("🚀 ~ userId:", userId);
   logger.info(`Fetching name candidates for user ID: ${userId}`);
   try {
     if (includeMeta) {
@@ -46,8 +39,17 @@ export default async (
       }));
     } else {
       const { rows } = await pool.query(
-        "SELECT * FROM get_name_candidates($1, $2, $3, $4, $5);",
-        [userId, popularity, genders, decadeIds, limit],
+        "SELECT * FROM get_name_candidates($1, $2, $3, $4, $5, $6, $7, $8);",
+        [
+          userId,
+          popularity,
+          genders,
+          decadeIds,
+          languageIds,
+          cultureIds,
+          limit,
+          excludeBridgeIds,
+        ],
       );
       return rows.map((row) => ({
         givenName: row.out_given_name,

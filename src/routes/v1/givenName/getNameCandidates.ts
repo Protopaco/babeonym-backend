@@ -59,6 +59,16 @@ import GivenName from "../../../models/GivenName.js";
  *           type: integer
  *         description: Maximum number of results.
  *       - in: query
+ *         name: excludeBridgeIds
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: >
+ *           Comma-separated list of given custom name bridge IDs the caller
+ *           already holds. Used to top up a partly full queue without being
+ *           handed the same names back.
+ *         example: 12,48,93
+ *       - in: query
  *         name: include
  *         required: false
  *         schema:
@@ -99,6 +109,12 @@ router.get(
       ? (req.query.cultureIds as string).split(",").map(Number)
       : null;
     const limit = req.query.limit ? Number(req.query.limit) : null;
+    const excludeBridgeIds = req.query.excludeBridgeIds
+      ? (req.query.excludeBridgeIds as string)
+          .split(",")
+          .map(Number)
+          .filter(Number.isInteger)
+      : null;
     const include = String(req.query.include ?? "")
       .split(",")
       .filter(Boolean);
@@ -113,6 +129,7 @@ router.get(
       cultureIds,
       limit,
       includeMeta,
+      excludeBridgeIds,
     );
 
     res.status(200).json(givenNames);
