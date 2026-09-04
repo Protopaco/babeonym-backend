@@ -118,6 +118,14 @@ router.get("/google/callback", async (req, res, next) => {
             return res.redirect(`${frontEndBaseUrl}/`);
           });
         } else if (!user.isNewUser) {
+          // Signing in resolved to an account that already existed. When the
+          // current session is anonymous, that session's work stays with the
+          // anonymous user rather than following the person into this account,
+          // so the frontend is told to explain what happened.
+          const orphanedAnonymousWork =
+            cookieUser?.authProvider === AuthProvider.ANONYMOUS &&
+            cookieUser.id !== user.id;
+
           req.logIn(user, (err) => {
             if (err) {
               logger.error(err, "Login error");
@@ -125,7 +133,11 @@ router.get("/google/callback", async (req, res, next) => {
             } else {
               logger.info("User logged in successfully:", user.email);
               //setCookie(req, res, next);
-              return res.redirect(`${frontEndBaseUrl}/`);
+              return res.redirect(
+                orphanedAnonymousWork
+                  ? `${frontEndBaseUrl}/?signedInToExistingAccount=true`
+                  : `${frontEndBaseUrl}/`,
+              );
             }
           });
         }
