@@ -54,43 +54,56 @@ router.get("/microsoft/callback", async (req, res, next) => {
   }
 
   await passport.authenticate("microsoft", async (err: any, user: any) => {
-    if (err) {
-      return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
-    }
-
-    if (!user || typeof user !== "object") {
-      return res.redirect(
-        `${frontEndBaseUrl}/error?error=oauth&details=no_user`,
-      );
-    }
-
-    if (user.isNewUser && !cookieUser) {
-      return res.redirect(
-        `${frontEndBaseUrl}/user/redirect?email=${encodeURIComponent(
-          user.email ?? "",
-        )}&microsoftId=${encodeURIComponent(user.microsoftId)}`,
-      );
-    } else if (user.isNewUser && cookieUser) {
-      logger.info(
-        `Linking new Microsoft account ${user.email} to existing user ${cookieUser.id}`,
-      );
-      await linkAuthProvider(
-        cookieUser.id,
-        AuthProvider.MICROSOFT,
-        user.microsoftId,
-        user.email,
-      );
-      logger.info(
-        `Successfully linked Microsoft account ${user.email} to user ${cookieUser.id}`,
-      );
-    }
-
-    req.logIn(user, (err) => {
+    try {
       if (err) {
+        logger.error(err, "Microsoft OAuth error");
         return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
       }
-      return res.redirect(`${frontEndBaseUrl}/`);
-    });
+
+      if (!user || typeof user !== "object") {
+        logger.error(
+          user,
+          "Invalid or missing user from Microsoft OAuth strategy",
+        );
+        return res.redirect(
+          `${frontEndBaseUrl}/error?error=oauth&details=no_user`,
+        );
+      }
+
+      if (user.isNewUser && !cookieUser) {
+        return res.redirect(
+          `${frontEndBaseUrl}/user/redirect?email=${encodeURIComponent(
+            user.email ?? "",
+          )}&microsoftId=${encodeURIComponent(user.microsoftId)}`,
+        );
+      } else if (user.isNewUser && cookieUser) {
+        logger.info(
+          `Linking new Microsoft account ${user.email} to existing user ${cookieUser.id}`,
+        );
+        await linkAuthProvider(
+          cookieUser.id,
+          AuthProvider.MICROSOFT,
+          user.microsoftId,
+          user.email,
+        );
+        logger.info(
+          `Successfully linked Microsoft account ${user.email} to user ${cookieUser.id}`,
+        );
+      }
+
+      req.logIn(user, (err) => {
+        if (err) {
+          logger.error(err, "Login error after Microsoft sign in");
+          return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
+        }
+        return res.redirect(`${frontEndBaseUrl}/`);
+      });
+    } catch (error) {
+      logger.error(error, "Unexpected error in Microsoft OAuth callback");
+      if (!res.headersSent) {
+        return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
+      }
+    }
   })(req, res, next);
 });
 
