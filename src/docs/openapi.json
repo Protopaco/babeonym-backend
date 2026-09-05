@@ -368,6 +368,26 @@
           }
         }
       },
+      "V1GivenNameOrderRequest": {
+        "type": "object",
+        "required": [
+          "givenCustomNameBridgeIds"
+        ],
+        "properties": {
+          "givenCustomNameBridgeIds": {
+            "type": "array",
+            "description": "The user's approved names in their new order, highest ranked first.",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              42,
+              17,
+              8
+            ]
+          }
+        }
+      },
       "V1UserSettingsRequest": {
         "type": "object",
         "properties": {
@@ -828,6 +848,51 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/givenName/order": {
+      "post": {
+        "operationId": "v1GivenNameOrder",
+        "summary": "Set the order of the user's approved given names",
+        "description": "Rewrites the authenticated user's ratings so the approved list matches the submitted order. Ratings are respaced evenly rather than nudged, so the order holds even for a user who has never compared any names.\n",
+        "tags": [
+          "GivenName"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/V1GivenNameOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user's approved given names in their new order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GivenNameMutationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or unrecognised given name order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthenticated"
           }
         }
       }

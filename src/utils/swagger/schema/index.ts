@@ -8,6 +8,7 @@ import givenNameSchemas from "./givenName";
 import healthSchemas from "./health";
 import nameFiltersSchemas from "./nameFilters";
 import notAuthenticatedSchemas from "./notAuthenticated";
+import orderSchemas from "./order";
 import settingsSchemas from "./settings";
 import successSchemas from "./success";
 import themeSchemas from "./theme";
@@ -26,6 +27,7 @@ const schemas = {
   ...healthSchemas,
   ...nameFiltersSchemas,
   ...notAuthenticatedSchemas,
+  ...orderSchemas,
   ...settingsSchemas,
   ...successSchemas,
   ...themeSchemas,
