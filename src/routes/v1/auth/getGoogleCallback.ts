@@ -132,7 +132,6 @@ router.get("/google/callback", async (req, res, next) => {
               return res.redirect(`${frontEndBaseUrl}/error?error=oauth`);
             } else {
               logger.info("User logged in successfully:", user.email);
-              //setCookie(req, res, next);
               return res.redirect(
                 orphanedAnonymousWork
                   ? `${frontEndBaseUrl}/?signedInToExistingAccount=true`

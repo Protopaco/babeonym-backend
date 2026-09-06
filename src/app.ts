@@ -63,7 +63,6 @@ app.use(
       "https://babeonym.com", // Your domain
       "https://api.babeonym.com", // API subdomain
       "https://www.babeonym.com", // www version
-      "https://babeonym.vercel.app", // Vercel subdomain
       process.env.FRONTEND_BASE_URL, // Environment variable
     ].filter(Boolean) as string[], // Remove undefined values
     credentials: true,

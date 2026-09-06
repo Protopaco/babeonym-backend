@@ -1430,6 +1430,16 @@
               }
             }
           },
+          "429": {
+            "description": "Too many sessions created from this address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
