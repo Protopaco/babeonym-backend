@@ -7,6 +7,7 @@ import updateGivenNameAction from "../../../db/updateGivenNameAction";
 import getApprovedGivenNames from "../../../db/getApprovedGivenNames";
 import shouldPromptAccountCreation from "../../../utils/shouldPromptAccountCreation";
 import User from "../../../models/User";
+import approvedGivenNameLimit from "../../../utils/approvedGivenNameLimit";
 
 /**
  * @swagger
@@ -31,7 +32,7 @@ import User from "../../../models/User";
  *             schema:
  *               $ref: '#/components/schemas/GivenNameMutationResponse'
  *       400:
- *         description: Invalid request parameters
+ *         description: Invalid request parameters, or the account already holds the maximum number of approved given names
  *         content:
  *           application/json:
  *             schema:
@@ -61,6 +62,27 @@ router.post(
 
     if (!newState) {
       return res.status(400).json({ message: "Invalid newState" });
+    }
+
+    // Only approvals are capped. Rejecting and snoozing cannot grow the list,
+    // and this is the endpoint every swipe in the generator hits, so making the
+    // common path pay for an extra query would be the wrong trade.
+    //
+    // Rejections are bounded anyway: given_name_action upserts on
+    // (user_id, given_custom_name_bridge_id), so a name is one row however many
+    // times it is swiped, and the ceiling is the size of the name corpus.
+    //
+    // Re-approving a name that is already approved is refused at the limit even
+    // though it would not add a row. Distinguishing that case costs another
+    // query to save a no-op, which is not worth it.
+    if (newState === NameState.APPROVED) {
+      const approvedGivenNameCount = (await getApprovedGivenNames(userId))
+        .length;
+      if (approvedGivenNameCount >= approvedGivenNameLimit) {
+        return res.status(400).json({
+          message: `Account already holds the maximum of ${approvedGivenNameLimit} approved given names`,
+        });
+      }
     }
 
     await updateGivenNameAction(userId, givenCustomNameBridgeId, newState);

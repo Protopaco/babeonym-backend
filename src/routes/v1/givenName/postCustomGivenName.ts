@@ -8,6 +8,7 @@ import { logger } from "../../../utils/logger.js";
 import User from "../../../models/User.js";
 import isBadWord from "../../../utils/isBadWord.js";
 import normalizeCustomGivenName from "../../../utils/normalizeCustomGivenName.js";
+import approvedGivenNameLimit from "../../../utils/approvedGivenNameLimit.js";
 
 /**
  * @swagger
@@ -32,7 +33,7 @@ import normalizeCustomGivenName from "../../../utils/normalizeCustomGivenName.js
  *             schema:
  *               $ref: '#/components/schemas/GivenNameMutationResponse'
  *       400:
- *         description: Invalid or inappropriate custom given name
+ *         description: Invalid or inappropriate custom given name, or the account already holds the maximum number of approved given names
  *         content:
  *           application/json:
  *             schema:
@@ -66,6 +67,20 @@ router.post(
       return res
         .status(400)
         .json({ error: "customGivenName contains inappropriate language" });
+    }
+
+    // Counted from the list rather than with a dedicated count query, so this
+    // needs no new database function. The list is never paginated and a capped
+    // account holds a hundred rows, so fetching it is cheaper than the round
+    // trip saved by counting.
+    //
+    // Read before the write and outside any transaction, so two requests
+    // arriving together can both pass. Deliberate: see approvedGivenNameLimit.
+    const approvedGivenNameCount = (await getApprovedGivenNames(userId)).length;
+    if (approvedGivenNameCount >= approvedGivenNameLimit) {
+      return res.status(400).json({
+        error: `Account already holds the maximum of ${approvedGivenNameLimit} approved given names`,
+      });
     }
 
     await addCustomGivenName(userId, normalizedGivenName);

@@ -927,7 +927,7 @@
             }
           },
           "400": {
-            "description": "Invalid request parameters",
+            "description": "Invalid request parameters, or the account already holds the maximum number of approved given names",
             "content": {
               "application/json": {
                 "schema": {
@@ -972,7 +972,7 @@
             }
           },
           "400": {
-            "description": "Invalid or inappropriate custom given name",
+            "description": "Invalid or inappropriate custom given name, or the account already holds the maximum number of approved given names",
             "content": {
               "application/json": {
                 "schema": {
