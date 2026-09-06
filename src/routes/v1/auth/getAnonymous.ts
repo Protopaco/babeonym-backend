@@ -3,6 +3,7 @@ const router = Router();
 import createUser from "../../../db/createUser";
 import AuthProvider from "../../../models/AuthProvider";
 import { logger } from "../../../utils/logger";
+import anonymousSessionRateLimit from "../../../middleware/anonymousSessionRateLimit";
 
 /**
  * @swagger
@@ -26,11 +27,17 @@ import { logger } from "../../../utils/logger";
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/V1AuthAnonymous400Response'
+ *       429:
+ *         description: Too many sessions created from this address
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
 
-router.get("/anonymous", async (req, res) => {
+router.get("/anonymous", anonymousSessionRateLimit, async (req, res) => {
   // Create an anonymous user session
   if (req.user) {
     return res.status(400).json({ error: "User is already authenticated" });

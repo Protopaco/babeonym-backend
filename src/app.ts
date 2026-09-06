@@ -18,6 +18,7 @@ import { Strategy as OidcStrategy } from "openid-client/passport";
 
 //middleware
 import mapErrorResponse from "./middleware/mapErrorResponse";
+import globalRateLimit from "./middleware/globalRateLimit";
 
 //Routes
 import authRoute from "./routes/v1/auth/index";
@@ -212,10 +213,13 @@ const server = app.listen(PORT, HOST, () => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(`${basePath}/v1/auth/`, authRoute);
-app.use(`${basePath}/v1/givenName/`, givenNameRoute);
-app.use(`${basePath}/v1/reference/`, referenceRoute);
-app.use(`${basePath}/v1/user/`, userRoute);
+// Applied per router rather than to the whole base path so that health is
+// visibly left out. Railway polls it on every deploy, and a healthcheck should
+// never be able to spend a caller's budget or be refused by one.
+app.use(`${basePath}/v1/auth/`, globalRateLimit, authRoute);
+app.use(`${basePath}/v1/givenName/`, globalRateLimit, givenNameRoute);
+app.use(`${basePath}/v1/reference/`, globalRateLimit, referenceRoute);
+app.use(`${basePath}/v1/user/`, globalRateLimit, userRoute);
 app.use(`${basePath}/v1/health/`, healhRoute);
 
 // Graceful shutdown
