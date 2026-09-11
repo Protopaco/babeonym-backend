@@ -203,12 +203,6 @@ passport.deserializeUser(async (userId: number, done) => {
 const PORT = Number(process.env.PORT || 2221);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
 
-const server = app.listen(PORT, HOST, () => {
-  logger.info(`API server running at http://${HOST}:${PORT}`);
-  logger.info(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
-  app.use(mapErrorResponse);
-});
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -220,6 +214,23 @@ app.use(`${basePath}/v1/givenName/`, globalRateLimit, givenNameRoute);
 app.use(`${basePath}/v1/reference/`, globalRateLimit, referenceRoute);
 app.use(`${basePath}/v1/user/`, globalRateLimit, userRoute);
 app.use(`${basePath}/v1/health/`, healhRoute);
+
+// After every router, which is what Express requires of an error handler: it
+// only reaches errors raised by middleware registered before it. This used to
+// be registered from inside the listen callback, where it still landed here by
+// luck of timing — the callback fires a tick after the module body, so the
+// routers had already gone in. Anything that changed that timing would have
+// silently stopped error mapping, and database errors would have surfaced as
+// bare 500s instead of the 409s and 400s mapErrorResponse produces.
+app.use(mapErrorResponse);
+
+// Listening last, so the server never accepts a request against a half-built
+// app. The window was only the microseconds the rest of this module takes to
+// run, but there is no reason to have one.
+const server = app.listen(PORT, HOST, () => {
+  logger.info(`API server running at http://${HOST}:${PORT}`);
+  logger.info(`Swagger docs at http://${HOST}:${PORT}/api/docs`);
+});
 
 // Graceful shutdown
 const gracefulShutdown = (signal: string) => {
