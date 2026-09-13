@@ -36,6 +36,11 @@ router.get(
     const userId = (req.user as User).id;
     logger.info("Received request for name filters from user ID: " + userId);
     const nameFilters: NameFilters = await getNameFilters();
+    // Filter options change a couple of times a year, so the browser keeps its
+    // copy for a day instead of asking again. Private because the route needs a
+    // session; after a day the browser revalidates against Express's ETag and
+    // gets a 304 when nothing changed.
+    res.set("Cache-Control", "private, max-age=86400");
     res.status(200).json({ nameFilters });
   },
 );
