@@ -18,12 +18,6 @@ import GivenName from "../../../models/GivenName.js";
  *       - GivenName
  *     parameters:
  *       - in: query
- *         name: popularity
- *         required: false
- *         schema:
- *           type: number
- *         description: Popularity percentile target from 0.0 to 1.0.
- *       - in: query
  *         name: genderIds
  *         required: false
  *         schema:
@@ -67,13 +61,6 @@ import GivenName from "../../../models/GivenName.js";
  *           already holds. Used to top up a partly full queue without being
  *           handed the same names back.
  *         example: 12,48,93
- *       - in: query
- *         name: include
- *         required: false
- *         schema:
- *           type: string
- *         description: Comma-separated include options.
- *         example: meta
  *     responses:
  *       200:
  *         description: Candidate given names
@@ -93,7 +80,6 @@ router.get(
   async (req: Request, res: Response) => {
     const userId = (req.user as User).id;
     logger.info(`GET name candidates by user ID: ${userId}`);
-    const popularity = Number(req.query.popularity) || null;
     const genderIds = req.query.genderIds
       ? (req.query.genderIds as string).split(",").map(Number).filter(Number.isInteger)
       : null;
@@ -114,20 +100,14 @@ router.get(
           .map(Number)
           .filter(Number.isInteger)
       : null;
-    const include = String(req.query.include ?? "")
-      .split(",")
-      .filter(Boolean);
-    const includeMeta = include.includes("meta");
 
     const givenNames: GivenName[] = await getNameCandidates(
       userId,
-      popularity,
       genderIds,
       decadeIds,
       languageIds,
       cultureIds,
       limit,
-      includeMeta,
       excludeBridgeIds,
     );
 

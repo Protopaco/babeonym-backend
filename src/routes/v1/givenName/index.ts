@@ -8,7 +8,6 @@ import getApprovedGivenNamesRouter from "./getApprovedGivenNames";
 import postGivenNameActionRouter from "./postGivenNameAction";
 import postGivenNameOrderRouter from "./postGivenNameOrder";
 import getGivenNamesSearch from "./getGivenNamesSearch";
-import getGivenNameEtymology from "./getGivenNameEtymology";
 
 router.use(getGivenNamesByUserId);
 router.use(getApprovedGivenNamesRouter);
@@ -17,6 +16,5 @@ router.use(postCompareGivenNamesRouter);
 router.use(postGivenNameActionRouter);
 router.use(postGivenNameOrderRouter);
 router.use(getGivenNamesSearch);
-router.use(getGivenNameEtymology);
 
 export default router;

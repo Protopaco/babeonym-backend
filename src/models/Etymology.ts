@@ -1,7 +1,7 @@
 export interface EtymologyLanguage {
   id: number;
   label: string;
-  flag: string | null;
+  flag: string;
 }
 
 export interface EtymologyCulture {
@@ -10,16 +10,13 @@ export interface EtymologyCulture {
 }
 
 export interface EtymologyMeaning {
-  short: string | null;
-  long: string | null;
-  dateCreated: string | null; // ISO timestamp from Postgres
-  dateUpdated: string | null; // ISO timestamp from Postgres
+  id: number;
+  text: string;
+  language: EtymologyLanguage | null;
 }
 
 export default interface Etymology {
-  givenCustomNameBridgeId: number;
-  givenName: string;
+  meanings: EtymologyMeaning[];
   languages: EtymologyLanguage[];
   cultures: EtymologyCulture[];
-  meaning: EtymologyMeaning;
 }

@@ -5,7 +5,7 @@ const etymologySchemas = {
     properties: {
       id: { type: "integer" },
       label: { type: "string" },
-      flag: { type: "string", nullable: true },
+      flag: { type: "string" },
     },
   },
 
@@ -20,18 +20,12 @@ const etymologySchemas = {
 
   EtymologyMeaning: {
     type: "object",
-    required: ["short", "long", "dateCreated", "dateUpdated"],
+    required: ["id", "text", "language"],
     properties: {
-      short: { type: "string", nullable: true },
-      long: { type: "string", nullable: true },
-      dateCreated: {
-        type: "string",
-        format: "date-time",
-        nullable: true,
-      },
-      dateUpdated: {
-        type: "string",
-        format: "date-time",
+      id: { type: "integer" },
+      text: { type: "string" },
+      language: {
+        allOf: [{ $ref: "#/components/schemas/EtymologyLanguage" }],
         nullable: true,
       },
     },
@@ -39,16 +33,14 @@ const etymologySchemas = {
 
   Etymology: {
     type: "object",
-    required: [
-      "givenCustomNameBridgeId",
-      "givenName",
-      "languages",
-      "cultures",
-      "meaning",
-    ],
+    required: ["meanings", "languages", "cultures"],
     properties: {
-      givenCustomNameBridgeId: { type: "integer" },
-      givenName: { type: "string" },
+      meanings: {
+        type: "array",
+        items: {
+          $ref: "#/components/schemas/EtymologyMeaning",
+        },
+      },
       languages: {
         type: "array",
         items: {
@@ -60,9 +52,6 @@ const etymologySchemas = {
         items: {
           $ref: "#/components/schemas/EtymologyCulture",
         },
-      },
-      meaning: {
-        $ref: "#/components/schemas/EtymologyMeaning",
       },
     },
   },

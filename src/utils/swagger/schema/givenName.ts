@@ -37,16 +37,17 @@ const givenNameSchemas = {
         type: "number",
         example: 1000,
       },
-      percentile: {
-        type: "number",
-        nullable: true,
-        example: 92,
-      },
       gender: {
         type: "string",
         nullable: true,
         description: "Key of Gender enum",
         example: "male",
+      },
+      etymology: {
+        allOf: [{ $ref: "#/components/schemas/Etymology" }],
+        nullable: true,
+        description:
+          "Null when the name has no meanings, languages or cultures.",
       },
     },
   },
