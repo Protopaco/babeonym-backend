@@ -125,8 +125,7 @@
             "type": "string"
           },
           "flag": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         }
       },
@@ -148,28 +147,23 @@
       "EtymologyMeaning": {
         "type": "object",
         "required": [
-          "short",
-          "long",
-          "dateCreated",
-          "dateUpdated"
+          "id",
+          "text",
+          "language"
         ],
         "properties": {
-          "short": {
-            "type": "string",
-            "nullable": true
+          "id": {
+            "type": "integer"
           },
-          "long": {
-            "type": "string",
-            "nullable": true
+          "text": {
+            "type": "string"
           },
-          "dateCreated": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "dateUpdated": {
-            "type": "string",
-            "format": "date-time",
+          "language": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EtymologyLanguage"
+              }
+            ],
             "nullable": true
           }
         }
@@ -177,18 +171,16 @@
       "Etymology": {
         "type": "object",
         "required": [
-          "givenCustomNameBridgeId",
-          "givenName",
+          "meanings",
           "languages",
-          "cultures",
-          "meaning"
+          "cultures"
         ],
         "properties": {
-          "givenCustomNameBridgeId": {
-            "type": "integer"
-          },
-          "givenName": {
-            "type": "string"
+          "meanings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtymologyMeaning"
+            }
           },
           "languages": {
             "type": "array",
@@ -201,9 +193,6 @@
             "items": {
               "$ref": "#/components/schemas/EtymologyCulture"
             }
-          },
-          "meaning": {
-            "$ref": "#/components/schemas/EtymologyMeaning"
           }
         }
       },
@@ -255,16 +244,20 @@
             "type": "number",
             "example": 1000
           },
-          "percentile": {
-            "type": "number",
-            "nullable": true,
-            "example": 92
-          },
           "gender": {
             "type": "string",
             "nullable": true,
             "description": "Key of Gender enum",
             "example": "male"
+          },
+          "etymology": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Etymology"
+              }
+            ],
+            "nullable": true,
+            "description": "Null when the name has no meanings, languages or cultures."
           }
         }
       },
@@ -1043,15 +1036,6 @@
         "parameters": [
           {
             "in": "query",
-            "name": "popularity",
-            "required": false,
-            "schema": {
-              "type": "number"
-            },
-            "description": "Popularity percentile target from 0.0 to 1.0."
-          },
-          {
-            "in": "query",
             "name": "genderIds",
             "required": false,
             "schema": {
@@ -1108,16 +1092,6 @@
             },
             "description": "Comma-separated list of given custom name bridge IDs the caller already holds. Used to top up a partly full queue without being handed the same names back.\n",
             "example": "12,48,93"
-          },
-          {
-            "in": "query",
-            "name": "include",
-            "required": false,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Comma-separated include options.",
-            "example": "meta"
           }
         ],
         "responses": {
@@ -1185,52 +1159,6 @@
           },
           "400": {
             "description": "Missing required search query",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/NotAuthenticated"
-          }
-        }
-      }
-    },
-    "/api/v1/givenName/etymology/{givenCustomNameBridgeId}": {
-      "get": {
-        "operationId": "v1GivenNameEtymology",
-        "summary": "Get given name etymology",
-        "description": "Returns etymology information for a specific given name.",
-        "tags": [
-          "GivenName"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "givenCustomNameBridgeId",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "ID of the given name"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Etymology data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Etymology"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid givenCustomNameBridgeId",
             "content": {
               "application/json": {
                 "schema": {

@@ -14,6 +14,7 @@ export default async (userId: number): Promise<GivenName[]> => {
       givenName: row.out_given_name,
       givenCustomNameBridgeId: row.out_given_custom_name_bridge_id,
       rating: row.out_rating,
+      etymology: row.out_etymology,
     }));
 
     return givenNames;
