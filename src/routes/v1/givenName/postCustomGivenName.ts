@@ -76,8 +76,30 @@ router.post(
     //
     // Read before the write and outside any transaction, so two requests
     // arriving together can both pass. Deliberate: see approvedGivenNameLimit.
-    const approvedGivenNameCount = (await getApprovedGivenNames(userId)).length;
-    if (approvedGivenNameCount >= approvedGivenNameLimit) {
+    const currentApprovedGivenNames = await getApprovedGivenNames(userId);
+
+    // A name already on the list is accepted without a write. The client refuses
+    // these itself, so this only catches a request that skipped it. Checked
+    // ahead of the limit so a full list does not refuse a name it already holds,
+    // and case-insensitively to match add_custom_given_name's canonical lookup.
+    const lowercaseGivenName = normalizedGivenName.toLowerCase();
+    const isAlreadyApproved = currentApprovedGivenNames.some(
+      (approvedGivenName) =>
+        approvedGivenName.givenName.toLowerCase() === lowercaseGivenName,
+    );
+    if (isAlreadyApproved) {
+      logger.info(
+        "Custom given name already approved, skipping write for user ID: " +
+          userId,
+      );
+      const promptAccountCreation = await shouldPromptAccountCreation(user);
+      return res.status(200).json({
+        approvedGivenNames: currentApprovedGivenNames,
+        user: { promptAccountCreation },
+      });
+    }
+
+    if (currentApprovedGivenNames.length >= approvedGivenNameLimit) {
       return res.status(400).json({
         error: `Account already holds the maximum of ${approvedGivenNameLimit} approved given names`,
       });
