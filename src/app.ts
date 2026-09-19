@@ -194,7 +194,10 @@ passport.deserializeUser(async (userId: number, done) => {
   const userFromDb = await getUser(userId);
   if (!userFromDb) {
     logger.error(`User with ID ${userId} not found during deserialization`);
-    return done(new Error("User not found"), null);
+    // False rather than an error: it signs the session out, so the caller gets
+    // a 401 and the app starts a fresh anonymous session. An error here turned
+    // every request carrying the stale cookie into a 500 with no way out.
+    return done(null, false);
   }
   logger.debug(userFromDb);
   done(null, userFromDb);
